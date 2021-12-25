@@ -4,6 +4,7 @@ import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.domain.Bookmark;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.presenter.BookmarkShorteningRequest;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.presenter.BookmarkShorteningResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -12,14 +13,16 @@ import org.springframework.web.client.RestTemplate;
 public class BookmarkShorteningService {
 
     private RestTemplate restTemplate;
+    private String urlServiceHost;
 
     @Autowired
-    public BookmarkShorteningService(RestTemplate restTemplate) {
+    public BookmarkShorteningService(RestTemplate restTemplate, @Value("${services.urlshortner.hostport}")String urlServiceHost) {
         this.restTemplate = restTemplate;
+        this.urlServiceHost = urlServiceHost;
     }
 
     public Bookmark shorten(Bookmark bookmark) {
-        String url = "http://localhost:8081/uri/shorten";
+        String url = urlServiceHost+"/uri/shorten";
         BookmarkShorteningRequest requestBody = new BookmarkShorteningRequest(bookmark.getLongUrl());
         ResponseEntity<BookmarkShorteningResponse> shortendUrlResponse = this.restTemplate.postForEntity(url, requestBody, BookmarkShorteningResponse.class);
 
@@ -27,7 +30,7 @@ public class BookmarkShorteningService {
     }
 
     public Bookmark fetchTitle(Bookmark bookmark) {
-        String url = "http://localhost:8081/uri/title?longUrl=" + bookmark.getLongUrl();
+        String url = urlServiceHost+"/uri/title?longUrl=" + bookmark.getLongUrl();
         ResponseEntity<String> urlTitleResponse = this.restTemplate.getForEntity(url, String.class);
 
         return Bookmark.builder().bookmark(bookmark).title(urlTitleResponse.getBody()).build();

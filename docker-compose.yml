@@ -6,8 +6,18 @@ services:
     ports:
       - "8080:8080"
   urishortner:
-    hostname: urishortner
+    hostname: urlshortner
     build: ./uri-shortner
     ports:
       - "8081:8081"
+  prometheus:
+    image: prom/prometheus:v2.32.1
+    hostname: prometheus
+    ports:
+      - "9090:9090"
+  grafana:
+    image: grafana/grafana:8.3.2
+    hostname: grafana
+    ports:
+      - "3000:3000"
     
