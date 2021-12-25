@@ -1,0 +1,15 @@
+global: 
+  scrape_interval: 3s 
+ 
+scrape_configs: 
+  - job_name: prometheus 
+    static_configs: 
+      - targets: ["localhost:9090"] 
+  - job_name: bookmarksmanager 
+    metrics_path: '/actuator/prometheus'
+    static_configs: 
+      - targets: ["bookmarksmanager:8080"] 
+  - job_name: urlshortner
+    metrics_path: '/actuator/prometheus'
+    static_configs: 
+      - targets: ["urlshortner:8081"] 
