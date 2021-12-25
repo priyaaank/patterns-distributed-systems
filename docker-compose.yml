@@ -15,7 +15,7 @@ services:
     hostname: prometheus
     volumes:
       - ./config/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./data/prometheus/:/prometheus
+      - prometheus:/prometheus
     ports:
       - "9090:9090"
   grafana:
@@ -26,3 +26,5 @@ services:
     ports:
       - "3000:3000"
     
+volumes:
+  prometheus:
