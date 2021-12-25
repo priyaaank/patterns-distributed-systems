@@ -1,10 +1,12 @@
 version: "3.9"
 services:
   bookmarksmanager:
+    hostname: bookmarksmanager
     build: ./bookmarks-manager
     ports:
       - "8080:8080"
   urishortner:
+    hostname: urishortner
     build: ./uri-shortner
     ports:
       - "8081:8081"

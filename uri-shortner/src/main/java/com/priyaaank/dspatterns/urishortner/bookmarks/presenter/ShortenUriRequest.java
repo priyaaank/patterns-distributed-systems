@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ShortenUriRequest {
 
-    public String uri;
+    private String uri;
 
     public Uri toDomain() {
         return new Uri(this.uri);

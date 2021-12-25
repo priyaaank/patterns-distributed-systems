@@ -6,10 +6,10 @@ import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.presenter.NewBookmark
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.service.EnrichBookmarksService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Base64;
 
 @Slf4j
 @RestController
@@ -17,15 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookmarksController {
 
     private EnrichBookmarksService enrichBookmarksService;
+    private RestTemplate restTemplate;
 
     @Autowired
-    public BookmarksController(EnrichBookmarksService enrichBookmarksService) {
+    public BookmarksController(EnrichBookmarksService enrichBookmarksService, RestTemplate restTemplate) {
         this.enrichBookmarksService = enrichBookmarksService;
+        this.restTemplate = restTemplate;
     }
 
     @PostMapping("/new")
     public BookmarksPresenter addBookmark(@RequestBody NewBookmarkRequest bookmarkRequest) {
         Bookmark bookmark = this.enrichBookmarksService.enrichBookmark(bookmarkRequest.toDomain());
+        log.info("Bookmark {}", bookmark);
         return BookmarksPresenter.fromDomain(bookmark);
     }
 

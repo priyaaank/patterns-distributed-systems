@@ -29,9 +29,12 @@ public class BookmarksPresenter {
     @JsonProperty("tags")
     private List<String> tags;
 
+    @JsonProperty("title")
+    private String title;
+
     public static BookmarksPresenter fromDomain(Bookmark bookmark) {
         return new BookmarksPresenter(bookmark.getId(), bookmark.getLongUrl(), bookmark.getShortenedUrl(),
-                bookmark.getName(), bookmark.getSummary(), bookmark.getTags());
+                bookmark.getName(), bookmark.getSummary(), bookmark.getTags(), bookmark.getTitle());
     }
 
 }
