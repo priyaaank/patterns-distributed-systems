@@ -20,9 +20,6 @@ public class BookmarksPresenter {
     @JsonProperty("shortUrl")
     private String shortUrl;
 
-    @JsonProperty("name")
-    private String name;
-
     @JsonProperty("summary")
     private String summary;
 
@@ -34,7 +31,7 @@ public class BookmarksPresenter {
 
     public static BookmarksPresenter fromDomain(Bookmark bookmark) {
         return new BookmarksPresenter(bookmark.getId(), bookmark.getLongUrl(), bookmark.getShortenedUrl(),
-                bookmark.getName(), bookmark.getSummary(), bookmark.getTags(), bookmark.getTitle());
+                bookmark.getSummary(), bookmark.getTags(), bookmark.getTitle());
     }
 
 }

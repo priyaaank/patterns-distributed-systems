@@ -14,14 +14,12 @@ public class Bookmark {
 
     private String longUrl;
     private String shortenedUrl;
-    private String name;
     private String summary;
     private String title;
     private List<String> tags = new ArrayList<>();
 
-    public Bookmark(String longUrl, String name) {
+    public Bookmark(String longUrl) {
         this.longUrl = longUrl;
-        this.name = name;
     }
 
     public String getId() {
@@ -35,7 +33,6 @@ public class Bookmark {
     @Override
     public String toString() {
         return "Bookmark = (" +
-                "name=" + name +
                 "title=" + title +
                 "summary=" + summary +
                 "tags=" + String.join(",", tags) +
@@ -53,7 +50,6 @@ public class Bookmark {
             this.tags(bookmark.getTags());
             this.title(bookmark.getTitle());
             this.summary(bookmark.getSummary());
-            this.name(bookmark.getName());
             return this;
         }
 
@@ -79,11 +75,6 @@ public class Bookmark {
 
         public BookmarkBuilder summary(String summary) {
             bookmark.summary = summary;
-            return this;
-        }
-
-        public BookmarkBuilder name(String name) {
-            bookmark.name = name;
             return this;
         }
 

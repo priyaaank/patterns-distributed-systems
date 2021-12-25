@@ -1,6 +1,7 @@
 package com.priyaaank.dspatterns.bookmarksmanager.bookmarks.service;
 
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.domain.Bookmark;
+import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.domain.BookmarkFieldSelector;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,16 +11,19 @@ import org.springframework.stereotype.Service;
 public class EnrichBookmarksService {
 
     private BookmarkShorteningService bookmarkShorteningService;
+    private BookmarkTitleResolver titleResolver;
 
     @Autowired
-    public EnrichBookmarksService(BookmarkShorteningService bookmarkShorteningService) {
+    public EnrichBookmarksService(BookmarkShorteningService bookmarkShorteningService, BookmarkTitleResolver titleResolver) {
         this.bookmarkShorteningService = bookmarkShorteningService;
+        this.titleResolver = titleResolver;
     }
 
-    public Bookmark enrichBookmark(Bookmark bookmark) {
+    public Bookmark enrichBookmark(String fieldsRequested, Bookmark bookmark) {
         log.info("Shortening url for bookmark {}", bookmark.getLongUrl());
-        Bookmark updatedShortUrl = this.bookmarkShorteningService.shorten(bookmark);
-        Bookmark updatedTitle = this.bookmarkShorteningService.fetchTitle(bookmark);
+        BookmarkFieldSelector fieldSelector = new BookmarkFieldSelector(fieldsRequested);
+        Bookmark updatedShortUrl = fieldSelector.enrichShortUrl(() -> this.bookmarkShorteningService.shorten(bookmark), bookmark);
+        Bookmark updatedTitle = fieldSelector.enrichTitle(() -> this.titleResolver.fetchTitle(bookmark), bookmark);
 
         return Bookmark
                 .builder()
