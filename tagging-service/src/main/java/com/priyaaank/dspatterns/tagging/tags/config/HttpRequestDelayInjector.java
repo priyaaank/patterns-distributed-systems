@@ -13,11 +13,14 @@ import java.util.Random;
 public class HttpRequestDelayInjector implements HandlerInterceptor {
 
     private Integer failurePercent;
+    private Integer delayInMillis;
     private Random randomNumberGenerator;
 
     @Autowired
-    public HttpRequestDelayInjector(@Value("${config.failurePercent}") Integer failurePercent) {
+    public HttpRequestDelayInjector(@Value("${config.failurePercent}") Integer failurePercent,
+                                    @Value("${config.delay.millis}") Integer delayInMillis) {
         this.failurePercent = failurePercent;
+        this.delayInMillis = delayInMillis;
         this.randomNumberGenerator = new Random();
     }
 
@@ -29,7 +32,7 @@ public class HttpRequestDelayInjector implements HandlerInterceptor {
 
     private void introduceProbabilisticDelay() throws InterruptedException {
         if (failurePercent >= this.randomNumberGenerator.nextInt(100)) {
-            Thread.sleep(10000);
+            Thread.sleep(delayInMillis);
         }
     }
 

@@ -11,10 +11,12 @@ public class AppConfig implements WebMvcConfigurer {
     @Value("${config.failurePercent}")
     Integer failurePercent;
 
+    @Value("${config.delay.millis}")
+    Integer delayInMillis;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new HttpRequestDelayInjector(failurePercent));
-//                .addPathPatterns("/myendpoint");
+        registry.addInterceptor(new HttpRequestDelayInjector(failurePercent, delayInMillis));
     }
 
 
