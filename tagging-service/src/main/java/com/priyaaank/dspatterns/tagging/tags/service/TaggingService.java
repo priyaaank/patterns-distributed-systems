@@ -1,7 +1,9 @@
 package com.priyaaank.dspatterns.tagging.tags.service;
 
+import com.priyaaank.dspatterns.tagging.tags.config.ThroughputController;
 import com.priyaaank.dspatterns.tagging.tags.domain.Tags;
 import com.priyaaank.dspatterns.tagging.tags.domain.Url;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,12 +18,19 @@ public class TaggingService {
     public static final int MAXIMUM_TAG_COUNT = 5;
     private Random randomNumGenerator = new Random();
     private RandomTagSetGenerator randomTagSetGenerator;
+    private ThroughputController<Tags> throughputController;
 
-    public TaggingService() {
+    @Autowired
+    public TaggingService(ThroughputController<Tags> throughputController) {
+        this.throughputController = throughputController;
         this.randomTagSetGenerator = new RandomTagSetGenerator();
     }
 
-    public Tags generateTagsFor(Url url) {
+    public Tags generateTagsFor(Url url) throws InterruptedException {
+        return throughputController.regulate(this::selectFewTagsAtRandom);
+    }
+
+    private Tags selectFewTagsAtRandom() {
         int generateCount = randomNumGenerator.nextInt(MAXIMUM_TAG_COUNT);
         generateCount = generateCount == 0 ? 1 : generateCount;
         return new Tags(randomTagSetGenerator.generate(generateCount));

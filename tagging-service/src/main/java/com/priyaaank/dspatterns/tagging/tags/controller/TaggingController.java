@@ -24,7 +24,7 @@ public class TaggingController {
     }
 
     @GetMapping("/generate")
-    public TagsPresenter generate(@RequestParam String url) {
+    public TagsPresenter generate(@RequestParam String url) throws InterruptedException {
         Tags tags = taggingService.generateTagsFor(new Url(url));
         return TagsPresenter.fromDomain(url, tags);
     }

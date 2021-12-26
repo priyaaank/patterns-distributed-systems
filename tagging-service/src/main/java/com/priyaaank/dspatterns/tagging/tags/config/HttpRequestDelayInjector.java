@@ -18,7 +18,7 @@ public class HttpRequestDelayInjector implements HandlerInterceptor {
 
     @Autowired
     public HttpRequestDelayInjector(@Value("${config.failurePercent}") Integer failurePercent,
-                                    @Value("${config.delay.millis}") Integer delayInMillis) {
+                                    @Value("${config.random.delay.millis}") Integer delayInMillis) {
         this.failurePercent = failurePercent;
         this.delayInMillis = delayInMillis;
         this.randomNumberGenerator = new Random();
