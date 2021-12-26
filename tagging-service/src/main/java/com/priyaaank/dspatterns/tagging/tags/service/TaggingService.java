@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 @Service
 public class TaggingService {
 
+    public static final int MAXIMUM_TAG_COUNT = 5;
     private Random randomNumGenerator = new Random();
     private RandomTagSetGenerator randomTagSetGenerator;
 
@@ -21,7 +22,9 @@ public class TaggingService {
     }
 
     public Tags generateTagsFor(Url url) {
-        return new Tags(randomTagSetGenerator.generate(randomNumGenerator.nextInt(5)));
+        int generateCount = randomNumGenerator.nextInt(MAXIMUM_TAG_COUNT);
+        generateCount = generateCount == 0 ? 1 : generateCount;
+        return new Tags(randomTagSetGenerator.generate(generateCount));
     }
 
     //TODO - Replace with an entity extraction service
