@@ -10,6 +10,11 @@ services:
     build: ./uri-shortner
     ports:
       - "8081:8081"
+  taggingservice:
+    hostname: taggingservice
+    build: ./tagging-service
+    ports:
+      - "8082:8082"
   prometheus:
     image: prom/prometheus:v2.32.1
     hostname: prometheus
