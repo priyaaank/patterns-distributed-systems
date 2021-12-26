@@ -60,4 +60,27 @@ public class AppConfig {
 
         return new RestTemplate(requestFactory);
     }
+
+    @Bean("restTemplateWithTimeout")
+    public RestTemplate restTemplateWithTimeout() {
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        connectionManager.setMaxTotal(10);
+        connectionManager.setDefaultMaxPerRoute(10);
+
+        RequestConfig requestConfig = RequestConfig
+                .custom()
+                .setConnectionRequestTimeout(5000) // timeout to get connection from pool
+                .setSocketTimeout(5000) // standard connection timeout
+                .setConnectTimeout(5000) // standard connection timeout
+                .build();
+
+        HttpClient httpClient = HttpClientBuilder.create()
+                .setConnectionManager(connectionManager)
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+
+        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+
+        return new RestTemplate(requestFactory);
+    }
 }

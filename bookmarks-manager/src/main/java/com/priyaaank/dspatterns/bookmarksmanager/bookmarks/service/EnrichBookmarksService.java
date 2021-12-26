@@ -12,11 +12,15 @@ public class EnrichBookmarksService {
 
     private BookmarkShorteningService bookmarkShorteningService;
     private BookmarkTitleResolver titleResolver;
+    private BookmarkTagsResolver bookmarkTagsResolver;
 
     @Autowired
-    public EnrichBookmarksService(BookmarkShorteningService bookmarkShorteningService, BookmarkTitleResolver titleResolver) {
+    public EnrichBookmarksService(BookmarkShorteningService bookmarkShorteningService,
+                                  BookmarkTitleResolver titleResolver,
+                                  BookmarkTagsResolver bookmarkTagsResolver) {
         this.bookmarkShorteningService = bookmarkShorteningService;
         this.titleResolver = titleResolver;
+        this.bookmarkTagsResolver = bookmarkTagsResolver;
     }
 
     public Bookmark enrichBookmark(String fieldsRequested, Bookmark bookmark) {
@@ -24,12 +28,14 @@ public class EnrichBookmarksService {
         BookmarkFieldSelector fieldSelector = new BookmarkFieldSelector(fieldsRequested);
         Bookmark updatedShortUrl = fieldSelector.enrichShortUrl(() -> this.bookmarkShorteningService.shorten(bookmark), bookmark);
         Bookmark updatedTitle = fieldSelector.enrichTitle(() -> this.titleResolver.fetchTitle(bookmark), bookmark);
+        Bookmark updatedTags = fieldSelector.enrichTags(() -> this.bookmarkTagsResolver.fetchTags(bookmark), bookmark);
 
         return Bookmark
                 .builder()
                 .bookmark(bookmark)
                 .shortenedUrl(updatedShortUrl.getShortenedUrl())
                 .title(updatedTitle.getTitle())
+                .tags(updatedTags.getTags())
                 .build();
     }
 }

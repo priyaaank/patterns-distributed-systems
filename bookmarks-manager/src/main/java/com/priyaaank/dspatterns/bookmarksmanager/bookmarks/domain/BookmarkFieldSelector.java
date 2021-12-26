@@ -9,7 +9,9 @@ public class BookmarkFieldSelector {
     private final List<String> fields;
 
     public BookmarkFieldSelector(String fieldJoinedByComma) {
-        fields = Arrays.asList(fieldJoinedByComma.split(","));
+        fields = fieldJoinedByComma == null ?
+                Arrays.asList("shortenedUrl", "title", "longUrl", "summary", "tags") :
+                Arrays.asList(fieldJoinedByComma.split(","));
     }
 
     public Bookmark enrichShortUrl(Supplier<Bookmark> supplier, Bookmark bookmark) {
@@ -20,6 +22,12 @@ public class BookmarkFieldSelector {
 
     public Bookmark enrichTitle(Supplier<Bookmark> supplier, Bookmark bookmark) {
         if (fields.contains("title"))
+            return supplier.get();
+        return bookmark;
+    }
+
+    public Bookmark enrichTags(Supplier<Bookmark> supplier, Bookmark bookmark) {
+        if (fields.contains("tags"))
             return supplier.get();
         return bookmark;
     }
