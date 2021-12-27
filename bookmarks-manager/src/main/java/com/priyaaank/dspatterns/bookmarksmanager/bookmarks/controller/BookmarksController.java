@@ -1,5 +1,6 @@
 package com.priyaaank.dspatterns.bookmarksmanager.bookmarks.controller;
 
+import com.priyaaank.dspatterns.bookmarksmanager.circuitbreaker.CircuitBreaker;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.domain.Bookmark;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.presenter.BookmarksPresenter;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.service.EnrichBookmarksService;
@@ -16,19 +17,17 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/bookmark")
 public class BookmarksController {
 
-    private EnrichBookmarksService enrichBookmarksService;
-    private RestTemplate restTemplate;
+    private CircuitBreaker<String, Bookmark, Bookmark> enrichCircuit;
 
     @Autowired
     public BookmarksController(EnrichBookmarksService enrichBookmarksService, RestTemplate restTemplate) {
-        this.enrichBookmarksService = enrichBookmarksService;
-        this.restTemplate = restTemplate;
+        this.enrichCircuit = new CircuitBreaker<>(enrichBookmarksService::enrichBookmark);
     }
 
     @GetMapping("/enrich")
-    public BookmarksPresenter createBookmark(@RequestParam String fieldsRequested, @RequestParam String url) {
-        Bookmark bookmark = this.enrichBookmarksService.enrichBookmark(fieldsRequested, new Bookmark(url));
-        log.info("Bookmark {}", bookmark);
+    public BookmarksPresenter enrichBookmark(@RequestParam String fieldsRequested, @RequestParam String url) {
+        Bookmark bookmark = enrichCircuit.check(fieldsRequested, new Bookmark(url));
+        log.debug("Bookmark {}", bookmark);
         return BookmarksPresenter.fromDomain(bookmark);
     }
 

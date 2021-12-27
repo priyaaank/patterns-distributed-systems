@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -25,15 +23,23 @@ public class HTTPRetryHandler<T> {
         do {
             try {
                 response = httpCall.get();
-            } catch (RuntimeException ee) {
-                log.error("Error occurred" + ee.getMessage());
-                if(currentRetryCount >= retryCount) throw ee;
+            } catch (RuntimeException re) {
+                bubbleUpExceptionIfRetriesOver(currentRetryCount, re);
             } finally {
                 currentRetryCount++;
             }
-        } while ((response == null || response.getStatusCode().is5xxServerError()) && currentRetryCount <= retryCount);
+        } while (untilRetriesArePending(currentRetryCount, response));
 
         return response;
+    }
+
+    private void bubbleUpExceptionIfRetriesOver(Integer currentRetryCount, RuntimeException re) {
+        log.error("Error occurred" + re.getMessage());
+        if (currentRetryCount >= retryCount) throw re;
+    }
+
+    private boolean untilRetriesArePending(Integer currentRetryCount, ResponseEntity<T> response) {
+        return (response == null || response.getStatusCode().is5xxServerError()) && currentRetryCount <= retryCount;
     }
 
 }
