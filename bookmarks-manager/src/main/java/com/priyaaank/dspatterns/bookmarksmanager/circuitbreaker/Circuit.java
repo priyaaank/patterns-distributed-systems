@@ -1,5 +1,6 @@
 package com.priyaaank.dspatterns.bookmarksmanager.circuitbreaker;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
@@ -35,19 +36,19 @@ public class Circuit implements Runnable {
         lastCircuitToggledTime = System.currentTimeMillis();
     }
 
+    @SneakyThrows
     @Override
     public void run() {
         Long currentTime;
         ApiRequest apiReq;
-        Boolean isShutdownInitiated = FALSE;
-        while (!isShutdownInitiated) {
+        while (true) {
             try {
                 if ((apiReq = this.apiCallStream.poll(30000L, TimeUnit.MILLISECONDS)) != null) {
                     requestHistory.add(apiReq);
                 }
             } catch (InterruptedException ie) {
                 log.error(ie.getMessage());
-                isShutdownInitiated = TRUE;
+                throw ie;
             } finally {
                 currentTime = System.currentTimeMillis();
                 dropOldRequests(currentTime);
