@@ -17,7 +17,10 @@ import static java.lang.Boolean.TRUE;
 @Slf4j
 public class Circuit implements Runnable {
 
-    Set<ApiRequest> requestHistory;
+    private static final Boolean OPEN = TRUE;
+    private static final Boolean CLOSED = FALSE;
+    private static final long RESET_WINDOW_MILLIS = 30000L;
+    private Set<ApiRequest> requestHistory;
     private BlockingQueue<ApiRequest> apiCallStream;
     private Long windowTimeMillis;
     private Double failureThreshold;
@@ -32,8 +35,8 @@ public class Circuit implements Runnable {
         this.failureThreshold = failureThreshold;
         this.toggleCircuit = toggleCircuit;
         this.isCircuitOpen = isCircuitOpen;
-        requestHistory = new TreeSet<>();
-        lastCircuitToggledTime = System.currentTimeMillis();
+        this.requestHistory = new TreeSet<>();
+        this.lastCircuitToggledTime = System.currentTimeMillis();
     }
 
     @SneakyThrows
@@ -42,18 +45,11 @@ public class Circuit implements Runnable {
         Long currentTime;
         ApiRequest apiReq;
         while (true) {
-            try {
-                if ((apiReq = this.apiCallStream.poll(30000L, TimeUnit.MILLISECONDS)) != null) {
-                    requestHistory.add(apiReq);
-                }
-            } catch (InterruptedException ie) {
-                log.error(ie.getMessage());
-                throw ie;
-            } finally {
-                currentTime = System.currentTimeMillis();
-                dropOldRequests(currentTime);
-                reviewState(currentTime);
-            }
+            if ((apiReq = this.apiCallStream.poll(RESET_WINDOW_MILLIS, TimeUnit.MILLISECONDS)) != null)
+                requestHistory.add(apiReq);
+            currentTime = System.currentTimeMillis();
+            dropOldRequests(currentTime);
+            reviewCircuitState(currentTime);
         }
     }
 
@@ -66,26 +62,24 @@ public class Circuit implements Runnable {
         log.debug("New size {}", this.requestHistory.size());
     }
 
-    private void reviewState(Long currentTime) {
-        if (isCircuitOpen.get() && (isFailureRatioBelowThreshold() || isTimeToResetCircuit(currentTime))) {
-            changeCircuitStateToBe(currentTime, "Closed", FALSE);
-        }
+    private void reviewCircuitState(Long currentTime) {
+        if (isCircuitOpen.get() && (isFailureRatioBelowThreshold() || isTimeToResetCircuit(currentTime)))
+            markCircuit(CLOSED, currentTime);
 
-        if (!isCircuitOpen.get() && !isFailureRatioBelowThreshold()) {
-            changeCircuitStateToBe(currentTime, "Open", TRUE);
-        }
+        if (!isCircuitOpen.get() && !isFailureRatioBelowThreshold())
+            markCircuit(OPEN, currentTime);
     }
 
-    private void changeCircuitStateToBe(Long currentTime, String s, Boolean aTrue) {
-        log.info("Circuit breaker is now {}!", s);
-        toggleCircuit.accept(aTrue);
+    private void markCircuit(Boolean isOpen, Long currentTime) {
+        log.info("Circuit breaker is now {}!", isOpen ? "Open" : "Closed");
+        toggleCircuit.accept(isOpen);
         requestHistory.clear();
         this.lastCircuitToggledTime = currentTime;
     }
 
     private boolean isTimeToResetCircuit(Long currentTime) {
         //every 30 seconds
-        return (currentTime - lastCircuitToggledTime) >= 30000L;
+        return (currentTime - lastCircuitToggledTime) >= RESET_WINDOW_MILLIS;
     }
 
     public Boolean isFailureRatioBelowThreshold() {
@@ -96,6 +90,7 @@ public class Circuit implements Runnable {
 
         if (this.requestHistory.size() == 0 || successCount == this.requestHistory.size()) return true;
         boolean isBelowThreshold = ((1 - (successCount * 1.0 / this.requestHistory.size())) < failureThreshold);
+
         log.debug("Total success {} | Total count {} | Is failure below threshold: {}", successCount, requestHistory.size(), isBelowThreshold);
         return isBelowThreshold;
     }

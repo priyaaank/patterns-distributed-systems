@@ -24,8 +24,8 @@ public class CircuitBreaker<P1, P2, T> {
     }
 
     public T check(P1 paramsOne, P2 paramTwo) {
-        if (isCircuitOpen)
-            throw new RuntimeException("The service is recovering. Please try again later");
+        if (isCircuitOpen) throw new RuntimeException("The service is recovering. Please try again later");
+
         Long currentTime = System.currentTimeMillis();
         try {
             T retValue = func.apply(paramsOne, paramTwo);
