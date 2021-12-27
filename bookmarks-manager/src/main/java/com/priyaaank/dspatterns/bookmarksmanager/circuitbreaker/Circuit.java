@@ -1,11 +1,11 @@
 package com.priyaaank.dspatterns.bookmarksmanager.circuitbreaker;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -35,18 +35,24 @@ public class Circuit implements Runnable {
         lastCircuitToggledTime = System.currentTimeMillis();
     }
 
-    @SneakyThrows
     @Override
     public void run() {
         Long currentTime;
         ApiRequest apiReq;
-        while (true) {
-            if ((apiReq = this.apiCallStream.poll()) != null) {
-                requestHistory.add(apiReq);
+        Boolean isShutdownInitiated = FALSE;
+        while (!isShutdownInitiated) {
+            try {
+                if ((apiReq = this.apiCallStream.poll(30000L, TimeUnit.MILLISECONDS)) != null) {
+                    requestHistory.add(apiReq);
+                }
+            } catch (InterruptedException ie) {
+                log.error(ie.getMessage());
+                isShutdownInitiated = TRUE;
+            } finally {
+                currentTime = System.currentTimeMillis();
+                dropOldRequests(currentTime);
+                reviewState(currentTime);
             }
-            currentTime = System.currentTimeMillis();
-            dropOldRequests(currentTime);
-            reviewState(currentTime);
         }
     }
 
@@ -61,18 +67,19 @@ public class Circuit implements Runnable {
 
     private void reviewState(Long currentTime) {
         if (isCircuitOpen.get() && (isFailureRatioBelowThreshold() || isTimeToResetCircuit(currentTime))) {
-            log.info("Circuit breaker is now closed!");
-            toggleCircuit.accept(FALSE);
-            requestHistory.clear();
-            this.lastCircuitToggledTime = currentTime;
+            changeCircuitStateToBe(currentTime, "Closed", FALSE);
         }
 
         if (!isCircuitOpen.get() && !isFailureRatioBelowThreshold()) {
-            log.info("Circuit breaker is now open!");
-            toggleCircuit.accept(TRUE);
-            requestHistory.clear();
-            this.lastCircuitToggledTime = currentTime;
+            changeCircuitStateToBe(currentTime, "Open", TRUE);
         }
+    }
+
+    private void changeCircuitStateToBe(Long currentTime, String s, Boolean aTrue) {
+        log.info("Circuit breaker is now {}!", s);
+        toggleCircuit.accept(aTrue);
+        requestHistory.clear();
+        this.lastCircuitToggledTime = currentTime;
     }
 
     private boolean isTimeToResetCircuit(Long currentTime) {
