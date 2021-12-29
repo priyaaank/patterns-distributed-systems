@@ -30,6 +30,13 @@ services:
       - ./data/grafana/:/var/lib/grafana
     ports:
       - "3000:3000"
+  jmeter:
+    hostname: jmeter
+    build: ./load-testing
+    ports: 
+      - "9270:9270"
+    volumes:
+      - ./load-testing/mount/:/load_test/
     
 volumes:
   prometheus:

@@ -13,3 +13,7 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs: 
       - targets: ["urlshortner:8081"] 
+  - job_name: jmeter
+    metrics_path: '/metrics'
+    static_configs: 
+      - targets: ["jmeter:9270"] 
