@@ -1,4 +1,4 @@
-package com.priyaaank.dspatterns.bookmarksmanager.bookmarks.service;
+package com.priyaaank.dspatterns.bookmarksmanager.bookmarks.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

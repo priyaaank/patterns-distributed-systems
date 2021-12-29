@@ -1,5 +1,6 @@
 package com.priyaaank.dspatterns.bookmarksmanager.bookmarks.service;
 
+import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.config.HTTPRetryHandler;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.domain.Bookmark;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.presenter.BookmarksTagsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
