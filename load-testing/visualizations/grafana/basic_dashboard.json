@@ -1,0 +1,2314 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      },
+      {
+        "datasource": "InfluxDB2.0",
+        "enable": true,
+        "iconColor": "rgb(23, 255, 0)",
+        "mappings": {},
+        "name": "Test Start",
+        "showIn": 0,
+        "tagsColumn": "type",
+        "target": {
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"testStartEnd\")\r\n  |> filter(fn: (r) => r[\"type\"] == \"started\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)"
+        },
+        "titleColumn": "testName"
+      },
+      {
+        "datasource": "InfluxDB2.0",
+        "enable": true,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "mappings": {},
+        "name": "Test End",
+        "showIn": 0,
+        "tagsColumn": "type",
+        "target": {
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"testStartEnd\")\r\n  |> filter(fn: (r) => r[\"type\"] == \"finished\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)"
+        },
+        "titleColumn": "testName"
+      }
+    ]
+  },
+  "description": "Live metrics from the load tests for various patterns",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": 13644,
+  "graphTooltip": 1,
+  "id": 2,
+  "iteration": 1640843275938,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 46,
+      "panels": [],
+      "title": "Summmary",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "rgb(31, 120, 193)",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 14,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "zSwK1V07k"
+          },
+          "dsType": "influxdb",
+          "groupBy": [],
+          "hide": false,
+          "measurement": "virtualUsers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"virtualUsers\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"meanActiveThreads\")\r\n  |> aggregateWindow(every: [[aggregation]]s, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "meanActiveThreads"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Active Users",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "rgb(31, 120, 193)",
+            "mode": "fixed"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 17,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [],
+          "hide": false,
+          "measurement": "virtualUsers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "import \"contrib/jsternberg/rows\"\r\nfrom(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"_field\"])\r\n  |> aggregateWindow(every: [[aggregation]]s, fn: count, createEmpty: true)\r\n  |> rows.map(fn: (r) => ({ r with _value: r._value /[[aggregation]] }))\r\n  \r\n",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "finishedThreads"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Overall Throughput",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "rgb(73, 31, 193)",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 1
+      },
+      "id": 20,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [],
+          "hide": false,
+          "measurement": "virtualUsers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"_field\"])\r\n  |> count()",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "finishedThreads"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Request Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "rgb(237, 20, 20)",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 15,
+        "y": 1
+      },
+      "id": 59,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [],
+          "hide": false,
+          "measurement": "virtualUsers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"errorCount\")\r\n  |> group(columns: [\"runId\"])\r\n  |> sum()\r\n",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "finishedThreads"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Errors Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": -1
+              },
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": -1
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "id": 18,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [],
+          "measurement": "virtualUsers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "successfulPercentages = () => {\r\n\r\ncountResponseTime=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"runId\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> keep(columns: [\"_value\", \"runId\"])\r\n  \r\nsumerrorCount=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"errorCount\")\r\n  |> group(columns: [\"runId\"])  \r\n  |> sum()\r\n  |> toFloat()\r\n  |> keep(columns: [\"_value\", \"runId\"])\r\n  \r\n  return join(\r\n      tables:{countResponseTime:countResponseTime, sumerrorCount:sumerrorCount},\r\n      on:[\"runId\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n             \r\n             percentage:  1.0 - r._value_sumerrorCount / r._value_countResponseTime      \r\n    }))   \r\n   \r\n}\r\n\r\nsuccessfulPercentages()",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "finishedThreads"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Success Rate",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgb(109, 109, 109)",
+                "value": null
+              },
+              {
+                "color": "rgba(232, 132, 56, 0.89)",
+                "value": 0.01
+              },
+              {
+                "color": "rgba(227, 4, 4, 0.9)",
+                "value": 0.1
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 1
+      },
+      "id": 21,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "dsType": "influxdb",
+          "groupBy": [],
+          "measurement": "virtualUsers",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "failuresPercentages = () => {\r\n\r\ncountResponseTime=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"runId\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> keep(columns: [\"_value\", \"runId\"])\r\n  \r\nsumerrorCount=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"errorCount\")\r\n  |> group(columns: [\"runId\"])\r\n  |> sum()\r\n  |> toFloat()\r\n  |> keep(columns: [\"_value\", \"runId\"])\r\n  \r\n  return join(\r\n      tables:{countResponseTime:countResponseTime, sumerrorCount:sumerrorCount},\r\n      on:[\"runId\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n             \r\n             percentage: r._value_sumerrorCount / r._value_countResponseTime         \r\n    }))       \r\n}\r\n\r\nfailuresPercentages()",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "finishedThreads"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Error Rate",
+      "type": "gauge"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 69,
+      "panels": [],
+      "title": "Throughput",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "Throughput",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 58,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "alias": "$tag_responseCode",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "requestsRaw",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "   import \"contrib/jsternberg/rows\" \r\n from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"responseCode\"])\r\n  |> aggregateWindow(every: [[aggregation]]s, fn: count, createEmpty: false)\r\n  |> rows.map(fn: (r) => ({ r with _value: r._value /[[aggregation]] }))",
+          "rawQuery": true,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "errorMessage",
+              "operator": "=",
+              "value": "Null"
+            }
+          ]
+        }
+      ],
+      "title": "Codes Throughput",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "Throughput",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "meanActiveThreads"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Virtual Users"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "responseTime"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "TPS"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Virtual Users"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Virtual Users"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 91,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "alias": "Throughput",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "requestsRaw",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": " from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"_field\"])\r\n  |> aggregateWindow(every: ${aggregation}s, fn: count, createEmpty: false)   \r\n  |> toFloat() \r\n  |> map(fn: (r) => ({ r with _value: float(v: r._value /float(v: ${aggregation})) }))\r\n",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "responseTime"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": " from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"virtualUsers\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"meanActiveThreads\")\r\n  |> aggregateWindow(every: [[aggregation]]s, fn: mean, createEmpty: false)\r\n  |> keep(columns: [\"_time\", \"_value\", \"_field\"])\r\n ",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Overall Throughput",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 44,
+      "panels": [],
+      "title": "Response Time Over time",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "Response Time, ms",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "meanActiveThreads"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Virtual Users"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "95 perc"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F9934E",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "99 perc"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E24D42",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Max"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BF1B00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Virtual Users"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Virtual Users"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 28,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "alias": "$tag_requestName",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$aggregation"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "requestsRaw",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\n  |> group(columns: [\"requestName\"])\n  |> aggregateWindow(every: [[aggregation]]s, fn: mean, createEmpty: false)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "responseTime"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "requestName",
+              "operator": "=~",
+              "value": "/^$request$/"
+            }
+          ]
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": " from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"virtualUsers\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"meanActiveThreads\")\r\n  |> aggregateWindow(every: [[aggregation]]s, fn: mean, createEmpty: false)\r\n  |> keep(columns: [\"_time\", \"_value\", \"_field\"])",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Average Response Times",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true,
+            "minWidth": 20
+          },
+          "decimals": 2,
+          "mappings": [],
+          "min": 1,
+          "noValue": "0%",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ErrorRate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "custom.align"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "rgba(0, 0, 0, 0)",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(183, 84, 26, 0.89)",
+                      "value": 0
+                    },
+                    {
+                      "color": "rgba(245, 54, 54, 0.9)",
+                      "value": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Response time is <= 1000, (%)"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "id": 108,
+      "links": [],
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "zSwK1V07k"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "get_percent_500 = () => {\r\nfcount_500=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> filter(fn: (r) => r[\"_value\"] <= 500)\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n\r\n count=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n    \r\n   return join(\r\n      tables:{fcount_500:fcount_500, count:count},\r\n      on:[\"requestName\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n             \"Request Name\": r.requestName,\r\n             \"Response time is <= 500, (%)\": r._value_fcount_500 * 100.0/ r._value_count,          \r\n    })) \r\n}\r\nget_percent_500()\r\n\r\n",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "zSwK1V07k"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "get_percent_1000 = () => {\r\n\r\nfcount_1000=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> filter(fn: (r) => r[\"_value\"] <= 1000)\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])  \r\n  \r\n count=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n    \r\n   return join(\r\n      tables:{fcount_1000:fcount_1000, count:count},\r\n      on:[\"requestName\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n              \"Request Name\": r.requestName,\r\n               \"Response time is <= 1000, (%)\": r._value_fcount_1000 * 100.0/ r._value_count,        \r\n    })) \r\n}\r\nget_percent_1000()",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "zSwK1V07k"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "get_percent_1500 = () => {\r\n\r\nfcount_1500=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> filter(fn: (r) => r[\"_value\"] <= 1500)\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])  \r\n  \r\n count=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n    \r\n   return join(\r\n      tables:{fcount_1500:fcount_1500, count:count},\r\n      on:[\"requestName\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n              \"Request Name\": r.requestName,\r\n               \"Response time is <= 1500, (%)\": r._value_fcount_1500 * 100.0/ r._value_count,        \r\n    })) \r\n}\r\nget_percent_1500()",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "zSwK1V07k"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "get_percent_2000 = () => {\r\n\r\nfcount_2000=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> filter(fn: (r) => r[\"_value\"] <= 2000)\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])  \r\n  \r\n count=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n    \r\n   return join(\r\n      tables:{fcount_2000:fcount_2000, count:count},\r\n      on:[\"requestName\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n              \"Request Name\": r.requestName,\r\n               \"Response time is <= 2000, (%)\": r._value_fcount_2000 * 100.0/ r._value_count,        \r\n    })) \r\n}\r\nget_percent_2000()",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "zSwK1V07k"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "get_percent_5000 = () => {\r\n\r\nfcount_5000=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> filter(fn: (r) => r[\"_value\"] <= 5000)\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])  \r\n  \r\n count=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n    \r\n   return join(\r\n      tables:{fcount_5000:fcount_5000, count:count},\r\n      on:[\"requestName\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n              \"Request Name\": r.requestName,\r\n               \"Response time is <= 5000, (%)\": r._value_fcount_5000 * 100.0/ r._value_count,        \r\n    })) \r\n}\r\nget_percent_5000()\r\n\r\n",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Response Times Distribution, %",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {
+            "reducers": []
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 38
+      },
+      "id": 85,
+      "panels": [],
+      "title": "Aggregate Report (ms)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true,
+            "minWidth": 60
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ErrorRate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "decimals"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "lcd-gauge"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#1F78C1",
+                      "value": 0.1
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 0.5
+                    },
+                    {
+                      "color": "#E24D42",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Max"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Median"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "90%"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "95%"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "99%"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "stddev"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "number"
+            },
+            "properties": [
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "string"
+            },
+            "properties": [
+              {
+                "id": "custom.filterable",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "requestName"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 162
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "id": 83,
+      "links": [],
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "90%"
+          }
+        ]
+      },
+      "pluginVersion": "8.3.2",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> mean()\r\n  |> group()\r\n  |> rename(columns: {\"_value\": \"Avg\"})\r\n  |> keep(columns: [\"Avg\", \"requestName\"])\r\n\r\n ",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> group()\r\n  |> rename(columns: {\"_value\": \"Count\"})\r\n  |> keep(columns: [\"requestName\", \"Count\"])",
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> max()\r\n  |> group()\r\n  |> rename(columns: {\"_value\": \"Max\"})\r\n  |> keep(columns: [\"Max\", \"requestName\"])",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> toFloat()\r\n  |> median()\r\n  |> group()\r\n  |> rename(columns: {\"_value\": \"Median\"})\r\n  |> keep(columns: [\"Median\", \"requestName\"])",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> toFloat()\r\n  |> quantile(q: 0.90)\r\n  |> group()\r\n  |> rename(columns: {\"_value\": \"90%\"})\r\n  |> keep(columns: [\"90%\", \"requestName\"])",
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> toFloat()\r\n  |> quantile(q: 0.95)\r\n  |> group()\r\n  |> rename(columns: {\"_value\": \"95%\"})\r\n  |> keep(columns: [\"95%\", \"requestName\"])",
+          "refId": "F",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> toFloat()\r\n  |> quantile(q: 0.99)\r\n  |> group()\r\n  |> rename(columns: {\"_value\": \"99%\"})\r\n  |> keep(columns: [\"99%\", \"requestName\"])",
+          "refId": "G",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> stddev()\r\n  |> group()\r\n  |> rename(columns: {\"_value\": \"stddev\"})\r\n  |> keep(columns: [\"stddev\", \"requestName\"])",
+          "refId": "H",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "tpsCalculator = () => {\r\ncount = from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"count\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> count()\r\n  |> toFloat()\r\n  |> group()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n\r\n integral = from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"count\")\r\n  |> group(columns: [\"requestName\"])\r\n  |> integral()\r\n  |> toFloat()\r\n  |> group() \r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n  \r\n  return join(\r\n      tables:{count:count, integral:integral},\r\n      on:[\"requestName\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n             requestName: r.requestName,\r\n             TPS: r._value_count / r._value_integral,\r\n             TPM: (r._value_count / r._value_integral) * 60.0,\r\n             TPH: (r._value_count / r._value_integral) * 60.0 * 60.0,        \r\n    }))       \r\n}\r\n\r\ntpsCalculator()",
+          "refId": "I",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "failuresPercentages = () => {\r\n\r\ncountResponseTime=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\r\n  |> group(columns: [\"requestName\"] )\r\n  |> count()\r\n  |> group()\r\n  |> toFloat()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n\r\n  \r\nsumerrorCount=from(bucket: v.bucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"errorCount\")\r\n  |> group(columns: [\"requestName\"] )\r\n  |> sum()\r\n  |> group()\r\n  |> toFloat()\r\n  |> keep(columns: [\"_value\", \"requestName\"])\r\n\r\n  return join(\r\n      tables:{countResponseTime:countResponseTime, sumerrorCount:sumerrorCount},\r\n      on:[\"requestName\"]\r\n    )\r\n    |> map(fn:(r) => ({\r\n             requestName: r.requestName,\r\n             ErrorRate: r._value_sumerrorCount / r._value_countResponseTime         \r\n    }))       \r\n}\r\n\r\nfailuresPercentages()",
+          "refId": "J",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Metrics Overview (in milliseconds)",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 33,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "GenerateTags",
+          "value": "GenerateTags"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "zSwK1V07k"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Individual Request",
+        "multi": false,
+        "name": "request",
+        "options": [],
+        "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.measurementTagValues(\r\n  bucket: v.bucket,\r\n  measurement: \"requestsRaw\",\r\n  tag: \"requestName\"\r\n)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "auto": false,
+        "current": {
+          "selected": true,
+          "text": "10s",
+          "value": "10"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Aggregation Interval",
+        "multi": false,
+        "name": "aggregation",
+        "options": [
+          {
+            "selected": false,
+            "text": "1",
+            "value": "1"
+          },
+          {
+            "selected": true,
+            "text": "10",
+            "value": "10"
+          },
+          {
+            "selected": false,
+            "text": "30",
+            "value": "30"
+          },
+          {
+            "selected": false,
+            "text": "60",
+            "value": "60"
+          }
+        ],
+        "query": "1,10,30,60",
+        "queryValue": "",
+        "refresh": 0,
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "LoadTestInfo",
+  "uid": "b4kP_KoMzasadasd",
+  "version": 9,
+  "weekStart": ""
+}

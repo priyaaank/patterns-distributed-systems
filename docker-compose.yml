@@ -15,14 +15,28 @@ services:
     build: ./tagging-service
     ports:
       - "8082:8082"
-  prometheus:
-    image: prom/prometheus:v2.32.1
-    hostname: prometheus
-    volumes:
-      - ./config/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus:/prometheus
+#  prometheus:
+#    image: prom/prometheus:v2.32.1
+#    hostname: prometheus
+#    volumes:
+#      - ./config/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#      - prometheus:/prometheus
+#    ports:
+#      - "9090:9090"
+  influxdb:
+    image: influxdb:2.1.1
+    hostname: influxdb
     ports:
-      - "9090:9090"
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=jmeter
+      - DOCKER_INFLUXDB_INIT_PASSWORD=passwordisallaboutjmeter
+      - DOCKER_INFLUXDB_INIT_ORG=jmeter
+      - DOCKER_INFLUXDB_INIT_BUCKET=jmeter
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=1234567890abcdefghijklmnopqrstyvwxyz
+    volumes:
+      - influxdb:/influxdb
   grafana:
     image: grafana/grafana:8.3.2
     hostname: grafana
@@ -30,13 +44,14 @@ services:
       - ./data/grafana/:/var/lib/grafana
     ports:
       - "3000:3000"
-  jmeter:
-    hostname: jmeter
-    build: ./load-testing
-    ports: 
-      - "9270:9270"
-    volumes:
-      - ./load-testing/mount/:/load_test/
+#  jmeter:
+#    hostname: jmeter
+#    build: ./load-testing
+#    ports: 
+#      - "9270:9270"
+#    volumes:
+#      - ./load-testing/mount/:/load_test/
     
 volumes:
   prometheus:
+  influxdb:
