@@ -14,19 +14,16 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class AppConfig {
 
+    public static final int FIVE_THOUSAND_MILLIS = 5000;
+
     @Primary
     @Bean("restTemplatePoolOne")
-    public RestTemplate restTemplatePoolOne() {
+    public RestTemplate sharedRestCallPool() {
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(10);
         connectionManager.setDefaultMaxPerRoute(2);
 
-        RequestConfig requestConfig = RequestConfig
-                .custom()
-//                .setConnectionRequestTimeout(5000) // timeout to get connection from pool
-//                .setSocketTimeout(5000) // standard connection timeout
-//                .setConnectTimeout(5000) // standard connection timeout
-                .build();
+        RequestConfig requestConfig = RequestConfig.custom().build();
 
         HttpClient httpClient = HttpClientBuilder.create()
                 .setConnectionManager(connectionManager)
@@ -39,17 +36,12 @@ public class AppConfig {
     }
 
     @Bean("restTemplatePoolTwo")
-    public RestTemplate restTemplatePoolTwo() {
+    public RestTemplate titleRestCallPool() {
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(10);
         connectionManager.setDefaultMaxPerRoute(2);
 
-        RequestConfig requestConfig = RequestConfig
-                .custom()
-//                .setConnectionRequestTimeout(5000) // timeout to get connection from pool
-//                .setSocketTimeout(5000) // standard connection timeout
-//                .setConnectTimeout(5000) // standard connection timeout
-                .build();
+        RequestConfig requestConfig = RequestConfig.custom().build();
 
         HttpClient httpClient = HttpClientBuilder.create()
                 .setConnectionManager(connectionManager)
@@ -69,9 +61,9 @@ public class AppConfig {
 
         RequestConfig requestConfig = RequestConfig
                 .custom()
-                .setConnectionRequestTimeout(5000) // timeout to get connection from pool
-                .setSocketTimeout(5000) // standard connection timeout
-                .setConnectTimeout(5000) // standard connection timeout
+                .setConnectionRequestTimeout(FIVE_THOUSAND_MILLIS)
+                .setSocketTimeout(FIVE_THOUSAND_MILLIS)
+                .setConnectTimeout(FIVE_THOUSAND_MILLIS)
                 .build();
 
         HttpClient httpClient = HttpClientBuilder.create()

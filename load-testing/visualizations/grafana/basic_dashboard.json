@@ -50,7 +50,7 @@
   "gnetId": 13644,
   "graphTooltip": 1,
   "id": 2,
-  "iteration": 1640843275938,
+  "iteration": 1640870086289,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -996,6 +996,98 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "zSwK1V07k"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 2,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 110,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "zSwK1V07k"
+          },
+          "query": "from(bucket: v.bucket)\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"requestsRaw\")\n  |> filter(fn: (r) => r[\"_field\"] == \"responseTime\")\n  |> group(columns: [\"requestName\",\"responseCode\"])\n  |> aggregateWindow(every: [[aggregation]]s, fn: count, createEmpty: false)",
+          "refId": "A"
+        }
+      ],
+      "title": "Throughput by url and codes",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "datasource": {
         "type": "influxdb",
@@ -1005,7 +1097,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 31
       },
       "id": 44,
       "panels": [],
@@ -1146,7 +1238,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 32
       },
       "id": 28,
       "links": [],
@@ -1353,7 +1445,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 39
       },
       "id": 108,
       "links": [],
@@ -1593,7 +1685,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 44
       },
       "id": 85,
       "panels": [],
@@ -1811,7 +1903,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 45
       },
       "id": 83,
       "links": [],
@@ -2211,36 +2303,11 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "GenerateTags",
-          "value": "GenerateTags"
-        },
-        "datasource": {
-          "type": "influxdb",
-          "uid": "zSwK1V07k"
-        },
-        "definition": "",
-        "hide": 0,
-        "includeAll": false,
-        "label": "Individual Request",
-        "multi": false,
-        "name": "request",
-        "options": [],
-        "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.measurementTagValues(\r\n  bucket: v.bucket,\r\n  measurement: \"requestsRaw\",\r\n  tag: \"requestName\"\r\n)",
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query",
-        "useTags": false
-      },
-      {
         "auto": false,
         "current": {
-          "selected": true,
-          "text": "10s",
-          "value": "10"
+          "selected": false,
+          "text": "1",
+          "value": "1"
         },
         "hide": 0,
         "includeAll": false,
@@ -2249,12 +2316,12 @@
         "name": "aggregation",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "1",
             "value": "1"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "10",
             "value": "10"
           },
@@ -2309,6 +2376,6 @@
   "timezone": "browser",
   "title": "LoadTestInfo",
   "uid": "b4kP_KoMzasadasd",
-  "version": 9,
+  "version": 14,
   "weekStart": ""
 }
