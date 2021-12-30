@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -38,4 +39,8 @@ public class BookmarkTagsResolver {
         return Bookmark.builder().bookmark(bookmark).tags(tags).build();
     }
 
+    public Bookmark generateTagsLocally(Bookmark bookmark) {
+        List<String> tags = Arrays.asList("DummyTags");
+        return Bookmark.builder().bookmark(bookmark).tags(tags).build();
+    }
 }

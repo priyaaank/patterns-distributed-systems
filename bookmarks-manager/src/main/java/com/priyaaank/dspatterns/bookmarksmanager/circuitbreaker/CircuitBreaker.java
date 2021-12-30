@@ -4,25 +4,25 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 @Slf4j
-public class CircuitBreaker<P1, P2, T> {
+public class CircuitBreaker<P, T> {
 
     private Boolean isCircuitEnabled;
-    private BiFunction<P1, P2, T> func;
-    private BiFunction<P1, P2, T> failover;
+    private Function<P, T> func;
+    private Function<P, T> failover;
     private BlockingQueue<ApiRequest> apiRequestStream;
     private Boolean isCircuitOpen = FALSE;
 
-    public CircuitBreaker(Boolean isCircuitEnabled, BiFunction<P1, P2, T> func) {
+    public CircuitBreaker(Boolean isCircuitEnabled, Function<P, T> func) {
         this(isCircuitEnabled, func, null);
     }
 
-    public CircuitBreaker(Boolean isCircuitEnabled, BiFunction<P1, P2, T> func, BiFunction<P1, P2, T> failOver) {
+    public CircuitBreaker(Boolean isCircuitEnabled, Function<P, T> func, Function<P, T> failOver) {
         this.isCircuitEnabled = isCircuitEnabled;
         this.func = func;
         this.failover = failOver;
@@ -33,26 +33,27 @@ public class CircuitBreaker<P1, P2, T> {
         }
     }
 
-    public T check(P1 paramsOne, P2 paramTwo) {
-        return isCircuitEnabled ? safeguardExecWithCircuitBreaker(paramsOne, paramTwo) : passThrough(paramsOne, paramTwo);
+    public T check(P param) {
+        if (isCircuitEnabled && isCircuitOpen) return failover.apply(param);
+        if (isCircuitEnabled) return safeguardExecWithCircuitBreaker(param);
+        return passThrough(param);
     }
 
-    private T passThrough(P1 paramsOne, P2 paramTwo) {
-        return func.apply(paramsOne, paramTwo);
+    private T passThrough(P param) {
+        return func.apply(param);
     }
 
-    private T safeguardExecWithCircuitBreaker(P1 paramsOne, P2 paramTwo) {
+    private T safeguardExecWithCircuitBreaker(P param) {
         if (isCircuitOpen) throw new RuntimeException("The service is recovering. Please try again later");
 
         Long currentTime = System.currentTimeMillis();
         try {
-            T retValue = func.apply(paramsOne, paramTwo);
+            T retValue = func.apply(param);
             this.apiRequestStream.add(new ApiRequest(TRUE, currentTime));
             return retValue;
         } catch (Exception ex) {
             log.error(ex.getMessage());
             this.apiRequestStream.add(new ApiRequest(FALSE, currentTime));
-            if (failover != null) return failover.apply(paramsOne, paramTwo);
             throw ex;
         }
     }
