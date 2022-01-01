@@ -2,7 +2,7 @@ package com.priyaaank.dspatterns.urishortner.bookmarks.presenter;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.priyaaank.dspatterns.urishortner.bookmarks.domain.Uri;
+import com.priyaaank.dspatterns.urishortner.bookmarks.domain.Url;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -15,7 +15,7 @@ public class ShortUriResponse {
     @JsonProperty("shortUri")
     private String shortUri;
 
-    public static ShortUriResponse fromDomain(Uri shortUri) {
-        return new ShortUriResponse(shortUri.getLongUri(), "/"+shortUri.getShortUri());
+    public static ShortUriResponse fromDomain(Url shortUri) {
+        return new ShortUriResponse(shortUri.getLongUrl(), "/"+shortUri.getShortUri());
     }
 }

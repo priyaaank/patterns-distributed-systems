@@ -14,26 +14,29 @@ public class EnrichBookmarksService {
 
     private BookmarkShorteningService bookmarkShorteningService;
     private BookmarkTitleResolver titleResolver;
+    private BookmarkTextResolver textResolver;
     private CircuitBreaker<Bookmark, Bookmark> tagsResolverCircuit;
 
     @Autowired
     public EnrichBookmarksService(BookmarkShorteningService bookmarkShorteningService,
                                   BookmarkTitleResolver titleResolver,
                                   BookmarkTagsResolver bookmarkTagsResolver,
+                                  BookmarkTextResolver textResolver,
                                   @Value("${circuitbreaker.enabled}") Boolean isCircuitBreakerEnabled,
                                   @Value("${circuitbreaker.failOver.enabled}") Boolean isFailOverEnabled) {
         this.bookmarkShorteningService = bookmarkShorteningService;
         this.titleResolver = titleResolver;
+        this.textResolver = textResolver;
         this.tagsResolverCircuit = isFailOverEnabled ?
-                new CircuitBreaker<>(isCircuitBreakerEnabled, bookmarkTagsResolver::fetchTags, bookmarkTagsResolver::generateTagsLocally):
+                new CircuitBreaker<>(isCircuitBreakerEnabled, bookmarkTagsResolver::fetchTags, bookmarkTagsResolver::generateTagsLocally) :
                 new CircuitBreaker<>(isCircuitBreakerEnabled, bookmarkTagsResolver::fetchTags);
     }
 
     public Bookmark enrichBookmark(String fieldsRequested, Bookmark bookmark) {
-        log.info("Shortening url for bookmark {}", bookmark.getLongUrl());
         BookmarkFieldSelector fieldSelector = new BookmarkFieldSelector(fieldsRequested);
         Bookmark updatedShortUrl = fieldSelector.enrichShortUrl(() -> this.bookmarkShorteningService.shorten(bookmark), bookmark);
         Bookmark updatedTitle = fieldSelector.enrichTitle(() -> this.titleResolver.fetchTitle(bookmark), bookmark);
+        Bookmark updatedText = fieldSelector.enrichText(() -> this.textResolver.fetchText(bookmark), bookmark);
         Bookmark updatedTags = fieldSelector.enrichTags((b) -> tagsResolverCircuit.check(b), bookmark);
 
         return Bookmark
@@ -41,6 +44,7 @@ public class EnrichBookmarksService {
                 .bookmark(bookmark)
                 .shortenedUrl(updatedShortUrl.getShortenedUrl())
                 .title(updatedTitle.getTitle())
+                .text(updatedText.getText())
                 .tags(updatedTags.getTags())
                 .build();
     }

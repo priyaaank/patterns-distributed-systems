@@ -31,7 +31,7 @@ public class BookmarksPresenter {
 
     public static BookmarksPresenter fromDomain(Bookmark bookmark) {
         return new BookmarksPresenter(bookmark.getId(), bookmark.getLongUrl(), bookmark.getShortenedUrl(),
-                bookmark.getSummary(), bookmark.getTags(), bookmark.getTitle());
+                bookmark.getText(), bookmark.getTags(), bookmark.getTitle());
     }
 
 }

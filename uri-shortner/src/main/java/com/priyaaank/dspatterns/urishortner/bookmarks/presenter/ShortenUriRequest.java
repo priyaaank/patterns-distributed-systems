@@ -1,6 +1,6 @@
 package com.priyaaank.dspatterns.urishortner.bookmarks.presenter;
 
-import com.priyaaank.dspatterns.urishortner.bookmarks.domain.Uri;
+import com.priyaaank.dspatterns.urishortner.bookmarks.domain.Url;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ public class ShortenUriRequest {
 
     private String uri;
 
-    public Uri toDomain() {
-        return new Uri(this.uri);
+    public Url toDomain() {
+        return new Url(this.uri);
     }
 }

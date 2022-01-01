@@ -5,12 +5,13 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class Uri {
+public class Url {
 
-    private String longUri;
+    private String longUrl;
     private String shortUri;
 
-    public Uri(String longUri) {
-        this.longUri = longUri;
+    public Url(String longUrl) {
+        this.longUrl = longUrl;
     }
+
 }

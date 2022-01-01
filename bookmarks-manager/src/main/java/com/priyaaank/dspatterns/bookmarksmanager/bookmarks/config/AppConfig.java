@@ -53,6 +53,24 @@ public class AppConfig {
         return new RestTemplate(requestFactory);
     }
 
+    @Bean("restTemplatePoolWithoutTimeout")
+    public RestTemplate restTemplateWithoutTimeout() {
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        connectionManager.setMaxTotal(1000);
+        connectionManager.setDefaultMaxPerRoute(1000);
+
+        RequestConfig requestConfig = RequestConfig.custom().build();
+
+        HttpClient httpClient = HttpClientBuilder.create()
+                .setConnectionManager(connectionManager)
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+
+        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+
+        return new RestTemplate(requestFactory);
+    }
+
     @Bean("restTemplateWithTimeout")
     public RestTemplate restTemplateWithTimeout() {
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
