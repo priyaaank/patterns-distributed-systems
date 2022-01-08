@@ -21,7 +21,7 @@ public class EnrichBookmarksService {
                                   @Value("${circuitbreaker.enabled}") Boolean isCircuitBreakerEnabled,
                                   @Value("${circuitbreaker.failOver.enabled}") Boolean isFailOverEnabled) {
         this.tagsResolverCircuit = isFailOverEnabled ?
-                new CircuitBreaker<>(isCircuitBreakerEnabled, bookmarkTagsResolver::fetchTags, bookmarkTagsResolver::generateTagsLocally) :
+                new CircuitBreaker<>(isCircuitBreakerEnabled, bookmarkTagsResolver::fetchTags, null) :
                 new CircuitBreaker<>(isCircuitBreakerEnabled, bookmarkTagsResolver::fetchTags);
     }
 
