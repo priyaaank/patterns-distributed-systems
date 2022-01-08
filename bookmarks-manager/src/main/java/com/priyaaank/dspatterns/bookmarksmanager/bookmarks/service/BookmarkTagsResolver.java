@@ -21,7 +21,7 @@ public class BookmarkTagsResolver {
     private HTTPRetryHandler<BookmarksTagsResponse> retryHandler;
 
     @Autowired
-    public BookmarkTagsResolver(@Qualifier("restTemplateWithTimeout") RestTemplate restTemplate,
+    public BookmarkTagsResolver(@Qualifier("restTemplatePoolWithoutTimeout") RestTemplate restTemplate,
                                 @Value("${services.tagservice.hostport}") String urlServiceHost,
                                 HTTPRetryHandler<BookmarksTagsResponse> retryHandler) {
         this.restTemplate = restTemplate;
@@ -36,8 +36,4 @@ public class BookmarkTagsResolver {
         return bookmark.cloneBuilder().tags(tags).build();
     }
 
-    public Bookmark generateTagsLocally(Bookmark bookmark) {
-        List<String> tags = List.of("DummyTags");
-        return bookmark.cloneBuilder().tags(tags).build();
-    }
 }
