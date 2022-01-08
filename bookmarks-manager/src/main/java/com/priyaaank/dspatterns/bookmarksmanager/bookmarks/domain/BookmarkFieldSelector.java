@@ -11,9 +11,7 @@ public class BookmarkFieldSelector {
     private final List<String> fields;
 
     public BookmarkFieldSelector(String commaDelimFields) {
-        fields = commaDelimFields == null ?
-                List.of(LONG_URL, TAGS) :
-                List.of(commaDelimFields.split(","));
+        fields = commaDelimFields == null ? List.of(LONG_URL, TAGS) : List.of(commaDelimFields.split(","));
     }
 
     public List<String> enrichTags(Function<Bookmark, Bookmark> func, Bookmark bookmark) {
