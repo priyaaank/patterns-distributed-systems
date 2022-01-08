@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class EnrichBookmarksService {
@@ -34,18 +36,17 @@ public class EnrichBookmarksService {
 
     public Bookmark enrichBookmark(String fieldsRequested, Bookmark bookmark) {
         BookmarkFieldSelector fieldSelector = new BookmarkFieldSelector(fieldsRequested);
-        Bookmark updatedShortUrl = fieldSelector.enrichShortUrl(() -> this.bookmarkShorteningService.shorten(bookmark), bookmark);
-        Bookmark updatedTitle = fieldSelector.enrichTitle(() -> this.titleResolver.fetchTitle(bookmark), bookmark);
-        Bookmark updatedText = fieldSelector.enrichText(() -> this.textResolver.fetchText(bookmark), bookmark);
-        Bookmark updatedTags = fieldSelector.enrichTags((b) -> tagsResolverCircuit.check(b), bookmark);
+        String updatedShortUrl = fieldSelector.enrichShortUrl(() -> this.bookmarkShorteningService.shorten(bookmark));
+        String updatedTitle = fieldSelector.enrichTitle(() -> this.titleResolver.fetchTitle(bookmark));
+        String updatedText = fieldSelector.enrichText(() -> this.textResolver.fetchText(bookmark));
+        List<String> updatedTags = fieldSelector.enrichTags((b) -> tagsResolverCircuit.check(b), bookmark);
 
-        return Bookmark
-                .builder()
-                .bookmark(bookmark)
-                .shortenedUrl(updatedShortUrl.getShortenedUrl())
-                .title(updatedTitle.getTitle())
-                .text(updatedText.getText())
-                .tags(updatedTags.getTags())
+        return Bookmark.builder()
+                .shortenedUrl(updatedShortUrl)
+                .title(updatedTitle)
+                .text(updatedText)
+                .tags(updatedTags)
+                .longUrl(bookmark.getLongUrl())
                 .build();
     }
 }

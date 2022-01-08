@@ -1,47 +1,38 @@
 package com.priyaaank.dspatterns.bookmarksmanager.bookmarks.domain;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class BookmarkFieldSelector {
 
+    public static final String SHORTENED_URL = "shortenedUrl";
+    public static final String TITLE = "title";
+    public static final String LONG_URL = "longUrl";
+    public static final String TEXT = "text";
+    public static final String TAGS = "tags";
     private final List<String> fields;
 
-    public BookmarkFieldSelector(String fieldJoinedByComma) {
-        fields = fieldJoinedByComma == null ?
-                Arrays.asList("shortenedUrl", "title", "longUrl", "text", "tags") :
-                Arrays.asList(fieldJoinedByComma.split(","));
+    public BookmarkFieldSelector(String commaDelimFields) {
+        fields = commaDelimFields == null ?
+                List.of(SHORTENED_URL, TITLE, LONG_URL, TEXT, TAGS) :
+                List.of(commaDelimFields.split(","));
     }
 
-    public Bookmark enrichShortUrl(Supplier<Bookmark> supplier, Bookmark bookmark) {
-        if (fields.contains("shortenedUrl"))
-            return supplier.get();
-        return bookmark;
+    public String enrichShortUrl(Supplier<Bookmark> supplier) {
+        return fields.contains(SHORTENED_URL) ? supplier.get().getShortenedUrl() : null;
     }
 
-    public Bookmark enrichText(Supplier<Bookmark> supplier, Bookmark bookmark) {
-        if (fields.contains("text"))
-            return supplier.get();
-        return bookmark;
+    public String enrichText(Supplier<Bookmark> supplier) {
+        return fields.contains(TEXT) ? supplier.get().getText() : null;
     }
 
-    public Bookmark enrichTitle(Supplier<Bookmark> supplier, Bookmark bookmark) {
-        if (fields.contains("title"))
-            return supplier.get();
-        return bookmark;
+    public String enrichTitle(Supplier<Bookmark> supplier) {
+        return fields.contains(TITLE) ? supplier.get().getTitle() : null;
     }
 
-    public Bookmark enrichTags(Supplier<Bookmark> supplier, Bookmark bookmark) {
-        if (fields.contains("tags"))
-            return supplier.get();
-        return bookmark;
-    }
-
-    public Bookmark enrichTags(Function<Bookmark, Bookmark> func, Bookmark bookmark) {
-        if (fields.contains("tags"))
-            return func.apply(bookmark);
-        return bookmark;
+    public List<String> enrichTags(Function<Bookmark, Bookmark> func, Bookmark bookmark) {
+        return fields.contains(TAGS) ? func.apply(bookmark).getTags() : new ArrayList<>();
     }
 }

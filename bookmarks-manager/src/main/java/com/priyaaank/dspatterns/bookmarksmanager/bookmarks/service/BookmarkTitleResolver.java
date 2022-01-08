@@ -24,6 +24,6 @@ public class BookmarkTitleResolver {
         String url = urlServiceHost + "/uri/title?longUrl=" + bookmark.getLongUrl();
         ResponseEntity<String> urlTitleResponse = this.restTemplate.getForEntity(url, String.class);
 
-        return Bookmark.builder().bookmark(bookmark).title(urlTitleResponse.getBody()).build();
+        return bookmark.cloneBuilder().title(urlTitleResponse.getBody()).build();
     }
 }

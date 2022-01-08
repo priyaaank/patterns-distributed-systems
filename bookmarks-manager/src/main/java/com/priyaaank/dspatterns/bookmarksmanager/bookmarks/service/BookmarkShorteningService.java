@@ -17,7 +17,7 @@ public class BookmarkShorteningService {
     private String urlServiceHost;
 
     @Autowired
-    public BookmarkShorteningService(@Qualifier("restTemplatePoolOne") RestTemplate restTemplate,
+    public BookmarkShorteningService(@Qualifier("restTemplatePoolTwo") RestTemplate restTemplate,
                                      @Value("${services.urlshortner.hostport}") String urlServiceHost) {
         this.restTemplate = restTemplate;
         this.urlServiceHost = urlServiceHost;
@@ -28,7 +28,7 @@ public class BookmarkShorteningService {
         BookmarkShorteningRequest requestBody = new BookmarkShorteningRequest(bookmark.getLongUrl());
         ResponseEntity<BookmarkShorteningResponse> shortendUrlResponse = this.restTemplate.postForEntity(url, requestBody, BookmarkShorteningResponse.class);
 
-        return Bookmark.builder().bookmark(bookmark).shortenedUrl(shortendUrlResponse.getBody().getShortUri()).build();
+        return bookmark.cloneBuilder().shortenedUrl(shortendUrlResponse.getBody().getShortUri()).build();
     }
 
 }

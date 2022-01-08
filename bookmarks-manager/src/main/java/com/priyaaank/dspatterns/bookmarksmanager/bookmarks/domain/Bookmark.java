@@ -1,5 +1,7 @@
 package com.priyaaank.dspatterns.bookmarksmanager.bookmarks.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.codec.binary.Hex;
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Bookmark {
 
     private String longUrl;
@@ -26,8 +30,8 @@ public class Bookmark {
         return Hex.encodeHexString(this.longUrl.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static BookmarkBuilder builder() {
-        return new BookmarkBuilder();
+    public BookmarkBuilder cloneBuilder() {
+        return builder().shortenedUrl(shortenedUrl).longUrl(longUrl).text(text).tags(tags).title(title);
     }
 
     @Override
@@ -40,47 +44,4 @@ public class Bookmark {
                 "shortenedUrl=" + shortenedUrl;
     }
 
-    public static class BookmarkBuilder {
-
-        private Bookmark bookmark = new Bookmark();
-
-        public BookmarkBuilder bookmark(Bookmark bookmark) {
-            this.longUrl(bookmark.getLongUrl());
-            this.shortenedUrl(bookmark.getShortenedUrl());
-            this.tags(bookmark.getTags());
-            this.title(bookmark.getTitle());
-            this.text(bookmark.getText());
-            return this;
-        }
-
-        public BookmarkBuilder longUrl(String longUrl) {
-            bookmark.longUrl = longUrl;
-            return this;
-        }
-
-        public BookmarkBuilder shortenedUrl(String shortenedUrl) {
-            bookmark.shortenedUrl = shortenedUrl;
-            return this;
-        }
-
-        public BookmarkBuilder tags(List<String> tags) {
-            bookmark.tags = tags;
-            return this;
-        }
-
-        public BookmarkBuilder title(String title) {
-            bookmark.title = title;
-            return this;
-        }
-
-        public BookmarkBuilder text(String text) {
-            bookmark.text = text;
-            return this;
-        }
-
-        public Bookmark build() {
-            return bookmark;
-        }
-
-    }
 }
