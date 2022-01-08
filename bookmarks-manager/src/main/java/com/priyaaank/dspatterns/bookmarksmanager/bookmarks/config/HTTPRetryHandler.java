@@ -11,22 +11,21 @@ import java.util.function.Supplier;
 @Component
 public class HTTPRetryHandler<T> {
 
-    private Integer retryCount;
+    private Integer maxRetryCount;
 
-    public HTTPRetryHandler(@Value("${http.retry.count}") Integer retryCount) {
-        this.retryCount = retryCount;
+    public HTTPRetryHandler(@Value("${http.retry.count}") Integer maxRetryCount) {
+        this.maxRetryCount = maxRetryCount;
     }
 
     public ResponseEntity<T> callWithRetry(Supplier<ResponseEntity<T>> httpCall) {
-        Integer currentRetryCount = 0;
+        Integer currentRetryCount = -1;
         ResponseEntity<T> response = null;
         do {
             try {
+                currentRetryCount++;
                 response = httpCall.get();
             } catch (RuntimeException re) {
                 bubbleUpExceptionIfRetriesOver(currentRetryCount, re);
-            } finally {
-                currentRetryCount++;
             }
         } while (untilRetriesArePending(currentRetryCount, response));
 
@@ -35,11 +34,11 @@ public class HTTPRetryHandler<T> {
 
     private void bubbleUpExceptionIfRetriesOver(Integer currentRetryCount, RuntimeException re) {
         log.error("Error occurred" + re.getMessage());
-        if (currentRetryCount >= retryCount) throw re;
+        if (currentRetryCount >= maxRetryCount) throw re;
     }
 
     private boolean untilRetriesArePending(Integer currentRetryCount, ResponseEntity<T> response) {
-        return (response == null || response.getStatusCode().is5xxServerError()) && currentRetryCount <= retryCount;
+        return (response == null || response.getStatusCode().is5xxServerError()) && currentRetryCount < maxRetryCount;
     }
 
 }

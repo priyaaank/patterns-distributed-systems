@@ -17,12 +17,15 @@ import java.util.stream.IntStream;
 public class ThroughputController<T> {
 
     private LinkedBlockingDeque<String> tokenQueue;
+    private Boolean tpsControlEnabled;
     private Integer configuredTPS;
     private Integer delayInMillis;
     private ScheduledThreadPoolExecutor threadPool;
 
-    public ThroughputController(@Value("${config.tps}") Integer configuredTPS,
+    public ThroughputController(@Value("${config.tps.control.enabled}") Boolean tpsControlEnabled,
+                                @Value("${config.tps}") Integer configuredTPS,
                                 @Value("${config.tps.penalty.delay.millis}") Integer delayInMillis) {
+        this.tpsControlEnabled = tpsControlEnabled;
         this.configuredTPS = configuredTPS;
         this.delayInMillis = delayInMillis;
         tokenQueue = new LinkedBlockingDeque<>();
@@ -30,6 +33,10 @@ public class ThroughputController<T> {
 
     @PostConstruct
     public void initiateTPSTokenGeneration() {
+        if (tpsControlEnabled) generateThroughputTokens();
+    }
+
+    private void generateThroughputTokens() {
         threadPool = new ScheduledThreadPoolExecutor(1);
         Runnable generateTokens = () -> {
             log.debug("Adding tokens to the TPS controller. Current size {}", tokenQueue.size());
@@ -44,7 +51,7 @@ public class ThroughputController<T> {
     }
 
     public T regulate(Supplier<T> supplierFunc) throws InterruptedException {
-        tokenQueue.poll(delayInMillis, TimeUnit.MILLISECONDS);
+        if (tpsControlEnabled) tokenQueue.poll(delayInMillis, TimeUnit.MILLISECONDS);
         return supplierFunc.get();
     }
 
