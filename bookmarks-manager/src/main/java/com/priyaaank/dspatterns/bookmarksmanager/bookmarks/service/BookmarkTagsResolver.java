@@ -31,9 +31,7 @@ public class BookmarkTagsResolver {
 
     public Bookmark fetchTags(Bookmark bookmark) {
         String url = urlServiceHost + "/tags/generate?url=" + bookmark.getLongUrl();
-        ResponseEntity<BookmarksTagsResponse> tagsResponse = retryHandler.callWithRetry(() -> {
-            return this.restTemplate.getForEntity(url, BookmarksTagsResponse.class);
-        });
+        ResponseEntity<BookmarksTagsResponse> tagsResponse = this.restTemplate.getForEntity(url, BookmarksTagsResponse.class);
         List<String> tags = tagsResponse == null ? new ArrayList<>() : tagsResponse.getBody().getTags();
         return bookmark.cloneBuilder().tags(tags).build();
     }
