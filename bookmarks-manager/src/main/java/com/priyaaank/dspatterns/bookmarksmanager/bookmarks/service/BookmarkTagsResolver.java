@@ -40,7 +40,7 @@ public class BookmarkTagsResolver {
     }
 
     public Bookmark generateTagsLocally(Bookmark bookmark) {
-        List<String> tags = Arrays.asList("DummyTags");
+        List<String> tags = List.of("DummyTags");
         return Bookmark.builder().bookmark(bookmark).tags(tags).build();
     }
 }
