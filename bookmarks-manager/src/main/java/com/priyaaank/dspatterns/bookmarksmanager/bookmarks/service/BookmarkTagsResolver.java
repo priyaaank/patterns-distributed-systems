@@ -1,6 +1,5 @@
 package com.priyaaank.dspatterns.bookmarksmanager.bookmarks.service;
 
-import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.config.HTTPRetryHandler;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.domain.Bookmark;
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.presenter.BookmarksTagsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +17,12 @@ public class BookmarkTagsResolver {
 
     private RestTemplate restTemplate;
     private String urlServiceHost;
-    private HTTPRetryHandler<BookmarksTagsResponse> retryHandler;
 
     @Autowired
     public BookmarkTagsResolver(@Qualifier("restTemplatePoolWithoutTimeout") RestTemplate restTemplate,
-                                @Value("${services.tagservice.hostport}") String urlServiceHost,
-                                HTTPRetryHandler<BookmarksTagsResponse> retryHandler) {
+                                @Value("${services.tagservice.hostport}") String urlServiceHost) {
         this.restTemplate = restTemplate;
         this.urlServiceHost = urlServiceHost;
-        this.retryHandler = retryHandler;
     }
 
     public Bookmark fetchTags(Bookmark bookmark) {
