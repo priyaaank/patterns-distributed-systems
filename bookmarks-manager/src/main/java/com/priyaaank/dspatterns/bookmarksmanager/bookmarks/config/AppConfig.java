@@ -20,8 +20,8 @@ public class AppConfig {
     @Bean("restTemplatePoolWithoutTimeout")
     public RestTemplate restTemplateWithoutTimeout() {
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(1000);
-        connectionManager.setDefaultMaxPerRoute(1000);
+        connectionManager.setMaxTotal(10);
+        connectionManager.setDefaultMaxPerRoute(10);
 
         RequestConfig requestConfig = RequestConfig.custom().build();
 
