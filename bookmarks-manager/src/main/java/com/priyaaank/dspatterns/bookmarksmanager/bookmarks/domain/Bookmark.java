@@ -17,9 +17,6 @@ import java.util.List;
 public class Bookmark {
 
     private String longUrl;
-    private String shortenedUrl;
-    private String text;
-    private String title;
     private List<String> tags = new ArrayList<>();
 
     public Bookmark(String longUrl) {
@@ -31,17 +28,14 @@ public class Bookmark {
     }
 
     public BookmarkBuilder cloneBuilder() {
-        return builder().shortenedUrl(shortenedUrl).longUrl(longUrl).text(text).tags(tags).title(title);
+        return builder().longUrl(longUrl).tags(tags);
     }
 
     @Override
     public String toString() {
         return "Bookmark = (" +
-                "title=" + title +
-                "text=" + text +
                 "tags=" + String.join(",", tags) +
-                "longUrl=" + longUrl +
-                "shortenedUrl=" + shortenedUrl;
+                "longUrl=" + longUrl + ")";
     }
 
 }

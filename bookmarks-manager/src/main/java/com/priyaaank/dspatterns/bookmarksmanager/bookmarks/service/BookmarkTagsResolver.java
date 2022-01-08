@@ -37,9 +37,4 @@ public class BookmarkTagsResolver {
         List<String> tags = tagsResponse == null ? new ArrayList<>() : tagsResponse.getBody().getTags();
         return bookmark.cloneBuilder().tags(tags).build();
     }
-
-    public Bookmark generateTagsLocally(Bookmark bookmark) {
-        List<String> tags = List.of("DummyTags");
-        return bookmark.cloneBuilder().tags(tags).build();
-    }
 }

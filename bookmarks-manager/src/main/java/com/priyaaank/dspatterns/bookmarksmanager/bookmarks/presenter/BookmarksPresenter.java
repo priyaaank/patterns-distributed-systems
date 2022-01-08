@@ -17,21 +17,11 @@ public class BookmarksPresenter {
     @JsonProperty("longUrl")
     private String longUrl;
 
-    @JsonProperty("shortUrl")
-    private String shortUrl;
-
-    @JsonProperty("summary")
-    private String summary;
-
     @JsonProperty("tags")
     private List<String> tags;
 
-    @JsonProperty("title")
-    private String title;
-
     public static BookmarksPresenter fromDomain(Bookmark bookmark) {
-        return new BookmarksPresenter(bookmark.getId(), bookmark.getLongUrl(), bookmark.getShortenedUrl(),
-                bookmark.getText(), bookmark.getTags(), bookmark.getTitle());
+        return new BookmarksPresenter(bookmark.getId(), bookmark.getLongUrl(), bookmark.getTags());
     }
 
 }
