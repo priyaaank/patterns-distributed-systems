@@ -21,8 +21,8 @@ import java.io.InputStreamReader;
 public class UrlDetailsPopulateBatchJob {
 
     private String batchFileName;
-    private Boolean rateControlledExecution;
     private Boolean batchMode;
+    private String gatewayHostPort;
     private UrlTextExtractorService enrichBookmarksService;
     private ResourceLoader resourceLoader;
     private RestTemplate restTemplate;
@@ -30,13 +30,13 @@ public class UrlDetailsPopulateBatchJob {
 
     @Autowired
     public UrlDetailsPopulateBatchJob(@Value("${batchFilePath}") String batchFileName,
-                                      @Value("${extract.text.rateControl}") Boolean rateControlledExecution,
                                       @Value("${extract.text.mode.batch}") Boolean batchMode,
+                                      @Value("${services.gateway.hostport}") String gatewayHostPort,
                                       UrlTextExtractorService urlTextExtractorService,
                                       ResourceLoader resourceLoader) {
         this.batchFileName = batchFileName;
-        this.rateControlledExecution = rateControlledExecution;
         this.batchMode = batchMode;
+        this.gatewayHostPort = gatewayHostPort;
         this.enrichBookmarksService = urlTextExtractorService;
         this.resourceLoader = resourceLoader;
         this.restTemplate = new RestTemplate();
@@ -48,23 +48,28 @@ public class UrlDetailsPopulateBatchJob {
         Resource resource = this.resourceLoader.getResource("classpath:" + this.batchFileName);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
         while ((line = bufferedReader.readLine()) != null) {
-            if (this.batchMode) {
-                extractWithLocalCall(line);
-            } else {
-                extractWithHttpCall(line);
-            }
+            enqueueRequest(line);
         }
         log.info("I have queued up all results!");
     }
 
-    private void extractWithHttpCall(String url) {
-        String textUrl = "http://bookmarksmanager:8080/bookmark/enrich?url=" + url + "&fieldsRequested=text";
+    private void enqueueRequest(String line) {
+        if (this.batchMode) {
+            enqueueLocalCall(line);
+        } else {
+            enqueueHttpCall(line);
+        }
+    }
+
+    private void enqueueHttpCall(String url) {
+        String textUrl = gatewayHostPort+"/bookmark/enrich?url=" + url + "&fieldsRequested=text";
         ResponseEntity<String> textResponse = restTemplate.getForEntity(textUrl, String.class);
         log.info("Response for {} was {}", url, textResponse.getBody());
     }
 
-    private void extractWithLocalCall(String line) {
-        this.enrichBookmarksService.extractText(new UrlTextExtractorService.ExtractionRequest<>(System.currentTimeMillis(), new Url(line)));
+    private void enqueueLocalCall(String line) {
+        UrlTextExtractorService.ExtractionRequest<Url> urlRequest = new UrlTextExtractorService.ExtractionRequest<>(System.currentTimeMillis(), new Url(line));
+        this.enrichBookmarksService.extractText(urlRequest);
     }
 
 }
