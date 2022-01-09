@@ -15,14 +15,14 @@ services:
     build: ./tagging-service
     ports:
       - "8082:8082"
-#  prometheus:
-#    image: prom/prometheus:v2.32.1
-#    hostname: prometheus
-#    volumes:
-#      - ./config/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-#      - prometheus:/prometheus
-#    ports:
-#      - "9090:9090"
+  rabbitmq:
+    image: rabbitmq:3.9.12-management
+    hostname: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672" 
+    volumes:
+      - ./config/etc/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
   influxdb:
     image: influxdb:2.1.1
     hostname: influxdb

@@ -1,5 +1,6 @@
 package com.priyaaank.dspatterns.urishortner.bookmarks.controller;
 
+import com.priyaaank.dspatterns.urishortner.bookmarks.config.RabbitMqSender;
 import com.priyaaank.dspatterns.urishortner.bookmarks.domain.Url;
 import com.priyaaank.dspatterns.urishortner.bookmarks.jobs.UrlDetailsPopulateBatchJob;
 import com.priyaaank.dspatterns.urishortner.bookmarks.presenter.ShortUriResponse;
@@ -26,16 +27,19 @@ public class UriShortnerController {
     private UrlTextExtractorService urlTextExtractorService;
     private UrlDetailsPopulateBatchJob urlDetailsPopulateBatchJob;
     private DeferredResultRegistry<String> deferredResultRegistry;
+    private RabbitMqSender messageSender;
 
     @Autowired
     public UriShortnerController(UriShorteningService uriShorteningService,
                                  UrlTextExtractorService urlTextExtractorService,
                                  UrlDetailsPopulateBatchJob urlDetailsPopulateBatchJob,
-                                 DeferredResultRegistry<String> deferredResultRegistry) {
+                                 DeferredResultRegistry<String> deferredResultRegistry,
+                                 RabbitMqSender sender) {
         this.uriShorteningService = uriShorteningService;
         this.urlTextExtractorService = urlTextExtractorService;
         this.urlDetailsPopulateBatchJob = urlDetailsPopulateBatchJob;
         this.deferredResultRegistry = deferredResultRegistry;
+        messageSender = sender;
     }
 
     @PostMapping("/shorten")
@@ -74,6 +78,14 @@ public class UriShortnerController {
         deferredResultRegistry.addToRegistry(urlRequest.getKey(), deferredResult);
         log.info("Returning the result for url {}", url);
         return deferredResult;
+    }
+
+    @GetMapping("/text/async")
+    public String getTextAsync(@RequestParam String url) {
+        if (url == null) return "No longUrl provided";
+
+        messageSender.sendMessage(url);
+        return "Successfully enqueued";
     }
 
     @GetMapping("/trigger/batch")
