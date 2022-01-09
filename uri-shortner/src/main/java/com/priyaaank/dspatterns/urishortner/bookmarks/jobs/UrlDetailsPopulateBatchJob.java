@@ -1,16 +1,13 @@
 package com.priyaaank.dspatterns.urishortner.bookmarks.jobs;
 
 import com.priyaaank.dspatterns.urishortner.bookmarks.domain.Url;
-import com.priyaaank.dspatterns.urishortner.bookmarks.service.DeferredResultRegistry;
 import com.priyaaank.dspatterns.urishortner.bookmarks.service.UrlTextExtractorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,25 +18,16 @@ import java.io.InputStreamReader;
 public class UrlDetailsPopulateBatchJob {
 
     private String batchFileName;
-    private Boolean batchMode;
-    private String gatewayHostPort;
     private UrlTextExtractorService enrichBookmarksService;
     private ResourceLoader resourceLoader;
-    private RestTemplate restTemplate;
-    private DeferredResultRegistry<String> deferredResultRegistry;
 
     @Autowired
     public UrlDetailsPopulateBatchJob(@Value("${batchFilePath}") String batchFileName,
-                                      @Value("${extract.text.mode.batch}") Boolean batchMode,
-                                      @Value("${services.gateway.hostport}") String gatewayHostPort,
                                       UrlTextExtractorService urlTextExtractorService,
                                       ResourceLoader resourceLoader) {
         this.batchFileName = batchFileName;
-        this.batchMode = batchMode;
-        this.gatewayHostPort = gatewayHostPort;
         this.enrichBookmarksService = urlTextExtractorService;
         this.resourceLoader = resourceLoader;
-        this.restTemplate = new RestTemplate();
     }
 
     public void triggerJob() throws IOException {
@@ -54,17 +42,7 @@ public class UrlDetailsPopulateBatchJob {
     }
 
     private void enqueueRequest(String line) {
-        if (this.batchMode) {
-            enqueueLocalCall(line);
-        } else {
-            enqueueHttpCall(line);
-        }
-    }
-
-    private void enqueueHttpCall(String url) {
-        String textUrl = gatewayHostPort+"/bookmark/enrich?url=" + url + "&fieldsRequested=text";
-        ResponseEntity<String> textResponse = restTemplate.getForEntity(textUrl, String.class);
-        log.info("Response for {} was {}", url, textResponse.getBody());
+        enqueueLocalCall(line);
     }
 
     private void enqueueLocalCall(String line) {
