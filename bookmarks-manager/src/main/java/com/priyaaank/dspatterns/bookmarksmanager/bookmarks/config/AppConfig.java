@@ -17,42 +17,6 @@ public class AppConfig {
     public static final int FIVE_THOUSAND_MILLIS = 5000;
 
     @Primary
-    @Bean("restTemplatePoolOne")
-    public RestTemplate sharedRestCallPool() {
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(10);
-        connectionManager.setDefaultMaxPerRoute(2);
-
-        RequestConfig requestConfig = RequestConfig.custom().build();
-
-        HttpClient httpClient = HttpClientBuilder.create()
-                .setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(requestConfig)
-                .build();
-
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-
-        return new RestTemplate(requestFactory);
-    }
-
-    @Bean("restTemplatePoolTwo")
-    public RestTemplate titleRestCallPool() {
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(10);
-        connectionManager.setDefaultMaxPerRoute(2);
-
-        RequestConfig requestConfig = RequestConfig.custom().build();
-
-        HttpClient httpClient = HttpClientBuilder.create()
-                .setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(requestConfig)
-                .build();
-
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-
-        return new RestTemplate(requestFactory);
-    }
-
     @Bean("restTemplatePoolWithoutTimeout")
     public RestTemplate restTemplateWithoutTimeout() {
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
@@ -71,26 +35,4 @@ public class AppConfig {
         return new RestTemplate(requestFactory);
     }
 
-    @Bean("restTemplateWithTimeout")
-    public RestTemplate restTemplateWithTimeout() {
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(10);
-        connectionManager.setDefaultMaxPerRoute(10);
-
-        RequestConfig requestConfig = RequestConfig
-                .custom()
-                .setConnectionRequestTimeout(FIVE_THOUSAND_MILLIS)
-                .setSocketTimeout(FIVE_THOUSAND_MILLIS)
-                .setConnectTimeout(FIVE_THOUSAND_MILLIS)
-                .build();
-
-        HttpClient httpClient = HttpClientBuilder.create()
-                .setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(requestConfig)
-                .build();
-
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-
-        return new RestTemplate(requestFactory);
-    }
 }
