@@ -48,9 +48,4 @@ public class RabbitMqConfig {
         return new MessageListenerAdapter(receiver, "receiveMessage");
     }
 
-    @Bean
-    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
-        return new RabbitAdmin(connectionFactory);
-    }
-
 }
