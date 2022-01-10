@@ -31,11 +31,6 @@ public class RabbitMqSender {
     public void sendMessage(String message) {
         Properties queueProperties = rabbitAdmin.getQueueProperties(RabbitMqConfig.queueName);
         int queueSize = Integer.parseInt(queueProperties.get(QUEUE_MESSAGE_COUNT).toString());
-        if (queueRejectEnabled) throwErrorIfSizeThresholdReached(queueSize);
         this.rabbitTemplate.convertAndSend(RabbitMqConfig.exchangeName, RabbitMqConfig.routingKey, message);
-    }
-
-    private void throwErrorIfSizeThresholdReached(int queueSize) {
-        if (queueSize >= this.maxQueueSize) throw new RuntimeException("Cannot accept more currently");
     }
 }

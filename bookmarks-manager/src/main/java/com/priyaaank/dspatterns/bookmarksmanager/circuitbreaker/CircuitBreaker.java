@@ -34,7 +34,8 @@ public class CircuitBreaker<P, T> {
     }
 
     public T check(P param) {
-        if (isCircuitEnabled && isCircuitOpen) return failover.apply(param);
+        //TODO - Below statement should be run only if failover is enabled
+        //if (isCircuitEnabled && isCircuitOpen) return failover.apply(param);
         if (isCircuitEnabled) return safeguardExecWithCircuitBreaker(param);
         return passThrough(param);
     }
