@@ -5,6 +5,7 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ public class RabbitMqConfig {
 
     @Bean
     public Queue queue() {
-        return new Queue(queueName);
+        return new Queue(queueName, false, false, false);
     }
 
     @Bean
@@ -45,6 +46,11 @@ public class RabbitMqConfig {
     @Bean
     MessageListenerAdapter listenerAdapter(RabbitMqListener receiver) {
         return new MessageListenerAdapter(receiver, "receiveMessage");
+    }
+
+    @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
     }
 
 }
