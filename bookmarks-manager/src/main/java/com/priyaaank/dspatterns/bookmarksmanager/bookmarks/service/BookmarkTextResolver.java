@@ -27,4 +27,11 @@ public class BookmarkTextResolver {
 
         return bookmark.cloneBuilder().text(urlTitleResponse.getBody()).build();
     }
+
+    public String enqueue(Bookmark bookmark) {
+        String url = urlServiceHost + "/uri/text/async?url=" + bookmark.getLongUrl();
+        ResponseEntity<String> urlTitleResponse = this.restTemplate.getForEntity(url, String.class);
+
+        return urlTitleResponse.getBody();
+    }
 }

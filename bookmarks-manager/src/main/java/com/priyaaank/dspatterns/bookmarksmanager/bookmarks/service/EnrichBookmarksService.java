@@ -17,6 +17,7 @@ public class EnrichBookmarksService {
     private BookmarkShorteningService bookmarkShorteningService;
     private BookmarkTitleResolver titleResolver;
     private BookmarkTextResolver textResolver;
+    private final CircuitBreaker<Bookmark, String> textResolverCircuit;
     private CircuitBreaker<Bookmark, Bookmark> tagsResolverCircuit;
 
     @Autowired
@@ -32,6 +33,7 @@ public class EnrichBookmarksService {
         this.tagsResolverCircuit = isFailOverEnabled ?
                 new CircuitBreaker<>(isCircuitBreakerEnabled, bookmarkTagsResolver::fetchTags, bookmarkTagsResolver::generateTagsLocally) :
                 new CircuitBreaker<>(isCircuitBreakerEnabled, bookmarkTagsResolver::fetchTags);
+        this.textResolverCircuit = new CircuitBreaker<>(isCircuitBreakerEnabled, textResolver::enqueue);
     }
 
     public Bookmark enrichBookmark(String fieldsRequested, Bookmark bookmark) {
@@ -49,4 +51,9 @@ public class EnrichBookmarksService {
                 .longUrl(bookmark.getLongUrl())
                 .build();
     }
+
+    public String enqueueForTextExtraction(Bookmark bookmark) {
+        return this.textResolverCircuit.check(bookmark);
+    }
+
 }
