@@ -9,6 +9,7 @@ The code here can remain an independent and open means of learning about the pat
 ## Tools / Frameworks used
 
 * Java 11
+* Maven
 * Springboot 
 * JMeter as load generation tool
 * Influx db as timeseries store for load metrics
