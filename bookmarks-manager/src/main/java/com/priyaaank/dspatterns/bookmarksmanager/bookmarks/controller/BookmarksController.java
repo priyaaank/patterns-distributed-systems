@@ -5,10 +5,7 @@ import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.presenter.BookmarksPr
 import com.priyaaank.dspatterns.bookmarksmanager.bookmarks.service.EnrichBookmarksService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -28,4 +25,10 @@ public class BookmarksController {
         log.debug("Bookmark {}", bookmark);
         return BookmarksPresenter.fromDomain(bookmark);
     }
+
+    @PostMapping("/enqueue")
+    public String enqueueBookmark(@RequestParam String url) {
+        return enrichBookmarksService.enqueueForTextExtraction(new Bookmark(url));
+    }
+
 }
