@@ -15,6 +15,7 @@ The code here can remain an independent and open means of learning about the pat
 * Influx db as timeseries store for load metrics
 * Grafana as a visualization tool
 * RabbitMQ as the distributed message queue
+* Docker
 
 Only basic Java knowledge is required to execute the patterns. All other components can be treated as a blackbox. 
 
