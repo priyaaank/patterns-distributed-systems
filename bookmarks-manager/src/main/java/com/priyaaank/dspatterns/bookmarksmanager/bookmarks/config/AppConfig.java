@@ -15,8 +15,8 @@ import org.springframework.web.client.RestTemplate;
 public class AppConfig {
 
     @Primary
-    @Bean("restClient")
-    public RestTemplate restCallClient() {
+    @Bean("restCallShortUrlClient")
+    public RestTemplate restCallShortUrlClient() {
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(10);
         connectionManager.setDefaultMaxPerRoute(2);
@@ -33,4 +33,21 @@ public class AppConfig {
         return new RestTemplate(requestFactory);
     }
 
+    @Bean("restCallTitleClient")
+    public RestTemplate restCallTitleClient() {
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        connectionManager.setMaxTotal(10);
+        connectionManager.setDefaultMaxPerRoute(2);
+
+        RequestConfig requestConfig = RequestConfig.custom().build();
+
+        HttpClient httpClient = HttpClientBuilder.create()
+                .setConnectionManager(connectionManager)
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+
+        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+
+        return new RestTemplate(requestFactory);
+    }
 }

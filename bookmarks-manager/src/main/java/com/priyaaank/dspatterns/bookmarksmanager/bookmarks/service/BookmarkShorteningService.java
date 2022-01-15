@@ -17,7 +17,7 @@ public class BookmarkShorteningService {
     private String urlServiceHost;
 
     @Autowired
-    public BookmarkShorteningService(@Qualifier("restClient") RestTemplate restTemplate,
+    public BookmarkShorteningService(@Qualifier("restCallShortUrlClient") RestTemplate restTemplate,
                                      @Value("${services.urlshortner.hostport}") String urlServiceHost) {
         this.restTemplate = restTemplate;
         this.urlServiceHost = urlServiceHost;

@@ -15,7 +15,7 @@ public class BookmarkTitleResolver {
     private String urlServiceHost;
 
     @Autowired
-    public BookmarkTitleResolver(@Qualifier("restClient") RestTemplate restTemplate,
+    public BookmarkTitleResolver(@Qualifier("restCallTitleClient") RestTemplate restTemplate,
                                  @Value("${services.urlshortner.hostport}") String urlServiceHost) {
         this.restTemplate = restTemplate;
         this.urlServiceHost = urlServiceHost;
