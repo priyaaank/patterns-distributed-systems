@@ -19,10 +19,12 @@ public class BookmarkShorteningService {
     @Autowired
     public BookmarkShorteningService(@Qualifier("restCallShortUrlClient") RestTemplate restTemplate,
                                      @Value("${services.urlshortner.hostport}") String urlServiceHost) {
+        //A dedicated thread pool
         this.restTemplate = restTemplate;
         this.urlServiceHost = urlServiceHost;
     }
 
+    //Make API call to another web service over HTTP get short url
     public Bookmark shorten(Bookmark bookmark) {
         String url = urlServiceHost + "/uri/shorten";
         BookmarkShorteningRequest requestBody = new BookmarkShorteningRequest(bookmark.getLongUrl());
