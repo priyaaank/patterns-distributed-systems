@@ -22,9 +22,14 @@ public class EnrichBookmarksService {
 
     public Bookmark enrichBookmark(String fieldsRequested, Bookmark bookmark) {
         BookmarkFieldSelector fieldSelector = new BookmarkFieldSelector(fieldsRequested);
-        String updatedShortUrl = fieldSelector.enrichShortUrl(() -> this.bookmarkShorteningService.shorten(bookmark));
-        String updatedTitle = fieldSelector.enrichTitle(() -> this.titleResolver.fetchTitle(bookmark));
 
+        //Call a remote service to fetch short url if field has been requested
+        String updatedShortUrl = fieldSelector.enrichShortUrlIfPresent(() -> this.bookmarkShorteningService.shorten(bookmark));
+
+        //Call a remote service to fetch title if field has been requested
+        String updatedTitle = fieldSelector.enrichTitleIfPresent(() -> this.titleResolver.fetchTitle(bookmark));
+
+        //Reconstruct the url and send back
         return Bookmark.builder()
                 .shortenedUrl(updatedShortUrl)
                 .title(updatedTitle)

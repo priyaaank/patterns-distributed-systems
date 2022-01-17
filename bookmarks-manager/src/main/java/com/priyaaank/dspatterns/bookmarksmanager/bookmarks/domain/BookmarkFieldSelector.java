@@ -16,11 +16,11 @@ public class BookmarkFieldSelector {
                 Arrays.asList(commaDelimitedFields.split(","));
     }
 
-    public String enrichShortUrl(Supplier<Bookmark> supplier) {
+    public String enrichShortUrlIfPresent(Supplier<Bookmark> supplier) {
         return fields.contains(SHORTENED_URL) ? supplier.get().getShortenedUrl() : null;
     }
 
-    public String enrichTitle(Supplier<Bookmark> supplier) {
+    public String enrichTitleIfPresent(Supplier<Bookmark> supplier) {
         return fields.contains(TITLE) ? supplier.get().getTitle() : null;
     }
 

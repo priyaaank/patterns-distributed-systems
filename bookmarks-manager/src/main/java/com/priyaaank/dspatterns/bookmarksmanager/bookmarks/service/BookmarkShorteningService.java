@@ -17,12 +17,14 @@ public class BookmarkShorteningService {
     private String urlServiceHost;
 
     @Autowired
-    public BookmarkShorteningService(@Qualifier("restClient") RestTemplate restTemplate,
+    public BookmarkShorteningService(@Qualifier("restClientUrl") RestTemplate restTemplate,
                                      @Value("${services.urlshortner.hostport}") String urlServiceHost) {
+        //A common thread pool
         this.restTemplate = restTemplate;
         this.urlServiceHost = urlServiceHost;
     }
 
+    //Make API call to another web service over HTTP get short url
     public Bookmark shorten(Bookmark bookmark) {
         String url = urlServiceHost + "/uri/shorten";
         BookmarkShorteningRequest requestBody = new BookmarkShorteningRequest(bookmark.getLongUrl());

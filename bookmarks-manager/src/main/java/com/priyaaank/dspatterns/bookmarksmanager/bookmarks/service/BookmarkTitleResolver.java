@@ -15,12 +15,14 @@ public class BookmarkTitleResolver {
     private String urlServiceHost;
 
     @Autowired
-    public BookmarkTitleResolver(@Qualifier("restClient") RestTemplate restTemplate,
+    public BookmarkTitleResolver(@Qualifier("restClientTitle") RestTemplate restTemplate,
                                  @Value("${services.urlshortner.hostport}") String urlServiceHost) {
+        //A common rest call thread pool
         this.restTemplate = restTemplate;
         this.urlServiceHost = urlServiceHost;
     }
 
+    //Make API call to another web service over HTTP get the title
     public Bookmark fetchTitle(Bookmark bookmark) {
         String url = urlServiceHost + "/uri/title?longUrl=" + bookmark.getLongUrl();
         ResponseEntity<String> urlTitleResponse = this.restTemplate.getForEntity(url, String.class);
