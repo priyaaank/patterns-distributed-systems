@@ -34,7 +34,7 @@ public class CircuitBreaker<P, T> {
     }
 
     public T check(P param) {
-        if (isCircuitEnabled && isCircuitOpen) return failover.apply(param);
+//        if (isCircuitEnabled && isCircuitOpen) return failover.apply(param);
         if (isCircuitEnabled) return safeguardExecWithCircuitBreaker(param);
         return passThrough(param);
     }
