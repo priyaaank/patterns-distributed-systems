@@ -123,7 +123,7 @@
       </ThreadGroup>
       <hashTree>
         <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Wait before batch trigger" enabled="true">
-          <stringProp name="ConstantTimer.delay">30000</stringProp>
+          <stringProp name="ConstantTimer.delay">15000</stringProp>
         </ConstantTimer>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="BatchTrigger" enabled="true">
