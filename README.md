@@ -21,6 +21,10 @@ Only basic Java knowledge is required to execute the patterns. All other compone
 
 ## Installation
 
+### OSX
+* Install Docker Desktop from [here](https://hub.docker.com/editions/community/docker-ce-desktop-mac)
+* Install 
+
 
 ## Execution
 
