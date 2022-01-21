@@ -28,10 +28,15 @@ Only basic Java knowledge is required to execute the patterns. All other compone
 * Install maven with brew `brew install maven`
 * Clone this repo `git clone https://github.com/priyaaank/patterns-distributed-systems.git` 
 * Execute `./rebuild_and_restart.sh`
-* Execute in terminal `curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fieldsRequested=title,text,longUrl,shortenedUrl,tags"`
+* Execute following `curl` command in terminal 
+  `curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fieldsRequested=title,text,longUrl,shortenedUrl,tags"`
 
-If you get a response to the last `curl` command, then your local setup is complete 
+If you get a response to the last `curl` command, then your local setup is complete and now load testing setup remains
 
+* Execute `mkdir -p load-testing/mount/`
+* cd into the directory `cd load-testing/mount/`
+* Download JMeter from [here](https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.3.tgz)
+* Extract files in the folder `load-testing/mount/`
 
 ### Linux
 
