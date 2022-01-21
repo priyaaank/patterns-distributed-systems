@@ -28,6 +28,20 @@ Only basic Java knowledge is required to execute the patterns. All other compone
 * Run docker desktop
 * Install maven with brew `brew install maven`
 * Clone this repo `git clone https://github.com/priyaaank/patterns-distributed-systems.git` 
+* Setup following branches
+```
+git branch --track bulkheads origin/bulkheads
+git branch --track bulkheads-fix origin/bulkheads-fix
+git branch --track transientfailure origin/transientfailure
+git branch --track transientfailure-fix origin/transientfailure-fix
+git branch --track circuitbreaker origin/circuitbreaker
+git branch --track circuitbreaker-fix origin/circuitbreaker-fix
+git branch --track gracefuldegradation origin/gracefuldegradation
+git branch --track batchtostream origin/batchtostream
+git branch --track batchtostream-fix origin/batchtostream-fix
+git branch --track backpressure origin/backpressure
+git branch --track backpressure-fix origin/backpressure-fix
+```
 * Execute `./rebuild_and_restart.sh`
 * Execute following `curl` command in terminal 
   ```
