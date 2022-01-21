@@ -22,8 +22,25 @@ Only basic Java knowledge is required to execute the patterns. All other compone
 ## Installation
 
 ### OSX
+* Install Java with brew `brew install openjdk@11`
 * Install Docker Desktop from [here](https://hub.docker.com/editions/community/docker-ce-desktop-mac)
-* Install 
+* Run docker desktop
+* Install maven with brew `brew install maven`
+* Clone this repo `git clone https://github.com/priyaaank/patterns-distributed-systems.git` 
+* Execute `./rebuild_and_restart.sh`
+* Execute in terminal `curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fieldsRequested=title,text,longUrl,shortenedUrl,tags"`
+
+If you get a response to the last `curl` command, then your local setup is complete 
+
+
+### Linux
+
+* Help needed to populate the instructions for installation
+
+
+### Windows 
+
+* Help needed to populate the instructions for installation
 
 
 ## Execution
