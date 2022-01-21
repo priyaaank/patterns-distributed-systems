@@ -43,6 +43,7 @@ If you get a response to the last `curl` command, then your local setup is compl
 * Execute on command line `./apache-jmeter-5.4.3/bin/jmeter`
 * Download plugins manager for jmeter from [here](https://jmeter-plugins.org/get/)
 * Move the downloaded jar to `load-testing/mount/apache-jmeter-5.4.3/libs/ext/`
+* Restart Jmeter
 * Open script `load-testing/scripts/Bulkheads.jmx`
 * If it prompts to install new plugins, click ok and install
 
