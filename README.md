@@ -56,7 +56,9 @@ If you get a response to the last `curl` command, then your local setup is compl
 * Extract files in the folder `load-testing/mount/`
 * Execute on command line `./apache-jmeter-5.4.3/bin/jmeter`
 * Download plugins manager for jmeter from [here](https://jmeter-plugins.org/get/)
-* Move the downloaded jar to `load-testing/mount/apache-jmeter-5.4.3/libs/ext/`
+* Move the downloaded jar to `load-testing/mount/apache-jmeter-5.4.3/lib/ext/`
+* Download influxdb2 metrics reporter jar from [here](https://github.com/mderevyankoaqa/jmeter-influxdb2-listener-plugin/releases/download/v1.5/jmeter-plugin-influxdb2-listener-1.5-all.jar)
+* Move the downloaded jar to `load-testing/mount/apache-jmeter-5.4.3/lib/ext/`
 * Restart Jmeter
 * Open script `load-testing/scripts/Bulkheads.jmx`
 * If it prompts to install new plugins, click ok and install
