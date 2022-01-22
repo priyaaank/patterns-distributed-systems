@@ -77,7 +77,6 @@ git branch --track backpressure-fix origin/backpressure-fix
 curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fieldsRequested=title,text,longUrl,shortenedUrl,tags"
 ```
 
-
 ### Windows 
 
 * Help needed to populate the instructions for installation
@@ -101,10 +100,60 @@ curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fields
 
 ## Execution
 
+Following is a short guide on executing load tests for specific scenarions and making observations
 
 ### Bulkheads
 
+#### Without Bulkheads (Common HTTP thread pool contention)
+
+* `git checkout bulkheads`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/Bulkheads.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
+
+#### With Bulkheads fix (Individual HTTP thread pools)
+
+* `git checkout bulkheads-fix`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/Bulkheads.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
+
 ### Circuit Breakers
+
+#### Without Timeouts (Using RestTemplate without timeout config)
+
+* `git checkout transientfailure`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/TransientFailure.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
+
+#### With Timeouts fix (Using RestTemplate with timeout config)
+
+* `git checkout transientfailure`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/TransientFailure.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
+
+#### With Retries (Retry all transient errors)
+
+* `git checkout transientfailure-fix`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/TransientFailure.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
+
+#### Without circuit breaker with Systematic failures (Retry causing load on service)
+
+* `git checkout circuitbreaker`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/CircuitBreaker.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
+
+#### With circuit breaker for Systematic failures (Circuit breaker preventing load aggravation)
+
+* `git checkout circuitbreaker-fix`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/CircuitBreaker.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
 
 #### Timeout / Response SLA
 
