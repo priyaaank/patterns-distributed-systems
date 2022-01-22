@@ -113,6 +113,8 @@ Following is a short guide on executing load tests for specific scenarions and m
 
 #### With Bulkheads fix (Individual HTTP thread pools)
 
+[Code Fix](https://github.com/priyaaank/patterns-distributed-systems/compare/bulkheads...bulkheads-fix)
+
 * `git checkout bulkheads-fix`
 * `./rebuild_and_restart.sh`
 * Open script `~/patterns-distributed-systems/load-testing/scripts/Bulkheads.jmx` and execute in JMeter
@@ -136,6 +138,8 @@ Following is a short guide on executing load tests for specific scenarions and m
 
 #### With Retries (Retry all transient errors)
 
+[Code Fix](https://github.com/priyaaank/patterns-distributed-systems/compare/transientfailure...transientfailure-fix)
+
 * `git checkout transientfailure-fix`
 * `./rebuild_and_restart.sh`
 * Open script `~/patterns-distributed-systems/load-testing/scripts/TransientFailure.jmx` and execute in JMeter
@@ -149,6 +153,8 @@ Following is a short guide on executing load tests for specific scenarions and m
 * View `Transactions per Second` and `Summary view`
 
 #### With Circuit breaker for Systematic failures (Circuit breaker preventing load aggravation)
+
+[Code Fix](https://github.com/priyaaank/patterns-distributed-systems/compare/circuitbreaker...circuitbreaker-fix)
 
 * `git checkout circuitbreaker-fix`
 * `./rebuild_and_restart.sh`
@@ -173,6 +179,8 @@ Following is a short guide on executing load tests for specific scenarions and m
 
 #### With Rate Limiting fix (Job queues one record at a time using HTTP API)
 
+[Code Fix](https://github.com/priyaaank/patterns-distributed-systems/compare/batchtostream...batchtostream-fix)
+
 * `git checkout batchtostream-fix`
 * `./rebuild_and_restart.sh`
 * Open script `~/patterns-distributed-systems/load-testing/scripts/BatchToOLTP.jmx` and execute in JMeter
@@ -188,6 +196,8 @@ Following is a short guide on executing load tests for specific scenarions and m
 * View `Transactions per Second` and `Summary view`
 
 #### With Rate Limiting fix (Job queues one record at a time using HTTP API)
+
+[Code Fix](https://github.com/priyaaank/patterns-distributed-systems/compare/backpressure...backpressure-fix)
 
 * `git checkout backpressure-fix`
 * `./rebuild_and_restart.sh`
