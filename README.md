@@ -1,5 +1,20 @@
 # Resilience Patterns for Distributed systems
 
+* [Overview](https://github.com/priyaaank/patterns-distributed-systems#overview)
+* [Tools / Frameworks used](https://github.com/priyaaank/patterns-distributed-systems#tools--frameworks-used)
+* [Application installation](https://github.com/priyaaank/patterns-distributed-systems#osx)
+  * [OSX](https://github.com/priyaaank/patterns-distributed-systems#osx)
+  * [Ubuntu 18.04](https://github.com/priyaaank/patterns-distributed-systems#osx)
+  * [Windows](https://github.com/priyaaank/patterns-distributed-systems#osx)
+* [Load test setup](https://github.com/priyaaank/patterns-distributed-systems#osx)
+* [Scenario execution](https://github.com/priyaaank/patterns-distributed-systems#execution)
+  * [Bulkheads](https://github.com/priyaaank/patterns-distributed-systems#bulkheads)
+  * [CircuitBreaker](https://github.com/priyaaank/patterns-distributed-systems#circuit-breakers)
+  * [Graceful Degradation](https://github.com/priyaaank/patterns-distributed-systems#graceful-degradation--failover-passing-control-to-failover-function-for-dummy-tags)
+  * [RateLimiting](https://github.com/priyaaank/patterns-distributed-systems#rate-limiting)
+  * [Backpressure](https://github.com/priyaaank/patterns-distributed-systems#backpressure)
+
+
 ## Overview
 
 This repository is a compilation of working code scripts that complete the [O'Reilly session on Patterns for Distributed Systems](https://learning.oreilly.com/live-events/design-patterns-for-distributed-systems/0636920061982/0636920061981/) The code here will be used during the session to reason and discuss various patterns and their benefits and applications. 
@@ -95,8 +110,6 @@ curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fields
 * Restart Jmeter
 * Open script `load-testing/scripts/Bulkheads.jmx`
 * If it prompts to install new plugins, click ok and install
-
-
 
 ## Execution
 
