@@ -141,30 +141,55 @@ Following is a short guide on executing load tests for specific scenarions and m
 * Open script `~/patterns-distributed-systems/load-testing/scripts/TransientFailure.jmx` and execute in JMeter
 * View `Transactions per Second` and `Summary view`
 
-#### Without circuit breaker with Systematic failures (Retry causing load on service)
+#### Without Circuit breaker with Systematic failures (Retry causing load on service)
 
 * `git checkout circuitbreaker`
 * `./rebuild_and_restart.sh`
 * Open script `~/patterns-distributed-systems/load-testing/scripts/CircuitBreaker.jmx` and execute in JMeter
 * View `Transactions per Second` and `Summary view`
 
-#### With circuit breaker for Systematic failures (Circuit breaker preventing load aggravation)
+#### With Circuit breaker for Systematic failures (Circuit breaker preventing load aggravation)
 
 * `git checkout circuitbreaker-fix`
 * `./rebuild_and_restart.sh`
 * Open script `~/patterns-distributed-systems/load-testing/scripts/CircuitBreaker.jmx` and execute in JMeter
 * View `Transactions per Second` and `Summary view`
 
-#### Timeout / Response SLA
+### Graceful degradation / Failover (Passing control to failover function for dummy tags)
 
-#### Retry
+* `git checkout gracefuldegradation`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/CircuitBreaker.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
 
-#### Circuit breaker
+### Rate Limiting
 
-### Graceful degradation / Failover
+#### Without Rate Limiting fix (All messages enqueued by the job locally)
 
-### Batch to stream
+* `git checkout batchtostream`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/BatchToOLTP.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
+
+#### With Rate Limiting fix (Job queues one record at a time using HTTP API)
+
+* `git checkout batchtostream-fix`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/BatchToOLTP.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
 
 ### Backpressure
 
+#### Without Backpressure (Unbounded queue into RabbitMQ Queue)
 
+* `git checkout backpressure`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/Backpressure.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
+
+#### With Rate Limiting fix (Job queues one record at a time using HTTP API)
+
+* `git checkout backpressure-fix`
+* `./rebuild_and_restart.sh`
+* Open script `~/patterns-distributed-systems/load-testing/scripts/Backpressure.jmx` and execute in JMeter
+* View `Transactions per Second` and `Summary view`
