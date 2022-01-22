@@ -19,7 +19,7 @@ The code here can remain an independent and open means of learning about the pat
 
 Only basic Java knowledge is required to execute the patterns. All other components can be treated as a blackbox. 
 
-## Installation
+## Application installation
 
 ### OSX
 
@@ -28,52 +28,6 @@ Only basic Java knowledge is required to execute the patterns. All other compone
 * Run docker desktop
 * Install maven with brew `brew install maven`
 * Clone this repo `git clone https://github.com/priyaaank/patterns-distributed-systems.git` 
-* Setup following branches
-```
-git branch --track bulkheads origin/bulkheads
-git branch --track bulkheads-fix origin/bulkheads-fix
-git branch --track transientfailure origin/transientfailure
-git branch --track transientfailure-fix origin/transientfailure-fix
-git branch --track circuitbreaker origin/circuitbreaker
-git branch --track circuitbreaker-fix origin/circuitbreaker-fix
-git branch --track gracefuldegradation origin/gracefuldegradation
-git branch --track batchtostream origin/batchtostream
-git branch --track batchtostream-fix origin/batchtostream-fix
-git branch --track backpressure origin/backpressure
-git branch --track backpressure-fix origin/backpressure-fix
-```
-* Execute `./rebuild_and_restart.sh`
-* Execute following `curl` command in terminal 
-  ```
-  curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fieldsRequested=title,text,longUrl,shortenedUrl,tags"
-  ```
-
-If you get a response to the last `curl` command, then your local setup is complete and now load testing setup remains
-
-* Execute `mkdir -p load-testing/mount/`
-* cd into the directory `cd load-testing/mount/`
-* Download JMeter from [here](https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.3.tgz)
-* Extract files in the folder `load-testing/mount/`
-* Execute on command line `./apache-jmeter-5.4.3/bin/jmeter`
-* Download plugins manager for jmeter from [here](https://jmeter-plugins.org/get/)
-* Move the downloaded jar to `load-testing/mount/apache-jmeter-5.4.3/lib/ext/`
-* Download influxdb2 metrics reporter jar from [here](https://github.com/mderevyankoaqa/jmeter-influxdb2-listener-plugin/releases/download/v1.5/jmeter-plugin-influxdb2-listener-1.5-all.jar)
-* Move the downloaded jar to `load-testing/mount/apache-jmeter-5.4.3/lib/ext/`
-* Restart Jmeter
-* Open script `load-testing/scripts/Bulkheads.jmx`
-* If it prompts to install new plugins, click ok and install
-
-
-### Linux (Ubutnu 18.04)
-
-* `cd ~`
-* `git clone https://github.com/priyaaank/patterns-distributed-systems.git`
-* apt-get install openjdk-11-jdk
-* apt-get install maven
-* Follow [instructions](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04) to install docker
-* Follow [instructions](https://linuxhostsupport.com/blog/how-to-install-and-configure-docker-compose-on-ubuntu-20-04/) to install `docker-compose` 
-* `cd ~/patterns-distributed-systems`
-* Execute `./rebuild_and_restart.sh`
 * Setup branches
 ```
 git branch --track bulkheads origin/bulkheads
@@ -88,10 +42,61 @@ git branch --track batchtostream-fix origin/batchtostream-fix
 git branch --track backpressure origin/backpressure
 git branch --track backpressure-fix origin/backpressure-fix
 ```
+* Execute `./rebuild_and_restart.sh`
+* Execute following `curl` command in terminal to validate text, title, etc for url are bring returned
+```
+curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fieldsRequested=title,text,longUrl,shortenedUrl,tags"
+```
+  
+### Linux (Ubutnu 18.04)
+
+* `cd ~`
+* `git clone https://github.com/priyaaank/patterns-distributed-systems.git`
+* `apt-get install openjdk-11-jdk`
+* `apt-get install maven`
+* Follow [instructions](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04) to install `docker`
+* Follow [instructions](https://linuxhostsupport.com/blog/how-to-install-and-configure-docker-compose-on-ubuntu-20-04/) to install `docker-compose` 
+* `cd ~/patterns-distributed-systems`
+* Setup branches
+```
+git branch --track bulkheads origin/bulkheads
+git branch --track bulkheads-fix origin/bulkheads-fix
+git branch --track transientfailure origin/transientfailure
+git branch --track transientfailure-fix origin/transientfailure-fix
+git branch --track circuitbreaker origin/circuitbreaker
+git branch --track circuitbreaker-fix origin/circuitbreaker-fix
+git branch --track gracefuldegradation origin/gracefuldegradation
+git branch --track batchtostream origin/batchtostream
+git branch --track batchtostream-fix origin/batchtostream-fix
+git branch --track backpressure origin/backpressure
+git branch --track backpressure-fix origin/backpressure-fix
+```
+* Execute `./rebuild_and_restart.sh`
+* Execute following `curl` command in terminal to validate text, title, etc for url are bring returned
+```
+curl -X GET "http://localhost:8080/bookmark/enrich?url=https://github.com&fieldsRequested=title,text,longUrl,shortenedUrl,tags"
+```
+
 
 ### Windows 
 
 * Help needed to populate the instructions for installation
+
+## Load test setup
+
+* Execute `mkdir -p load-testing/mount/`
+* cd into the directory `cd load-testing/mount/`
+* Download JMeter from [here](https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.3.tgz)
+* Extract files in the folder `load-testing/mount/`
+* Execute on command line `./apache-jmeter-5.4.3/bin/jmeter`
+* Download plugins manager for jmeter from [here](https://jmeter-plugins.org/get/)
+* Move the downloaded jar to `load-testing/mount/apache-jmeter-5.4.3/lib/ext/`
+* Download influxdb2 metrics reporter jar from [here](https://github.com/mderevyankoaqa/jmeter-influxdb2-listener-plugin/releases/download/v1.5/jmeter-plugin-influxdb2-listener-1.5-all.jar)
+* Move the downloaded jar to `load-testing/mount/apache-jmeter-5.4.3/lib/ext/`
+* Restart Jmeter
+* Open script `load-testing/scripts/Bulkheads.jmx`
+* If it prompts to install new plugins, click ok and install
+
 
 
 ## Execution
