@@ -64,10 +64,30 @@ If you get a response to the last `curl` command, then your local setup is compl
 * If it prompts to install new plugins, click ok and install
 
 
-### Linux
+### Linux (Ubutnu 18.04)
 
-* Help needed to populate the instructions for installation
-
+* `cd ~`
+* `git clone https://github.com/priyaaank/patterns-distributed-systems.git`
+* apt-get install openjdk-11-jdk
+* apt-get install maven
+* Follow [instructions](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04) to install docker
+* Follow [instructions](https://linuxhostsupport.com/blog/how-to-install-and-configure-docker-compose-on-ubuntu-20-04/) to install `docker-compose` 
+* `cd ~/patterns-distributed-systems`
+* Execute `./rebuild_and_restart.sh`
+* Setup branches
+```
+git branch --track bulkheads origin/bulkheads
+git branch --track bulkheads-fix origin/bulkheads-fix
+git branch --track transientfailure origin/transientfailure
+git branch --track transientfailure-fix origin/transientfailure-fix
+git branch --track circuitbreaker origin/circuitbreaker
+git branch --track circuitbreaker-fix origin/circuitbreaker-fix
+git branch --track gracefuldegradation origin/gracefuldegradation
+git branch --track batchtostream origin/batchtostream
+git branch --track batchtostream-fix origin/batchtostream-fix
+git branch --track backpressure origin/backpressure
+git branch --track backpressure-fix origin/backpressure-fix
+```
 
 ### Windows 
 
