@@ -1,18 +1,18 @@
 # Resilience Patterns for Distributed systems
 
-* [Overview](https://github.com/priyaaank/patterns-distributed-systems#overview)
-* [Tools / Frameworks used](https://github.com/priyaaank/patterns-distributed-systems#tools--frameworks-used)
-* [Application installation](https://github.com/priyaaank/patterns-distributed-systems#osx)
-  * [OSX](https://github.com/priyaaank/patterns-distributed-systems#osx)
-  * [Ubuntu 18.04](https://github.com/priyaaank/patterns-distributed-systems#osx)
-  * [Windows](https://github.com/priyaaank/patterns-distributed-systems#osx)
-* [Load test setup](https://github.com/priyaaank/patterns-distributed-systems#osx)
-* [Scenario execution](https://github.com/priyaaank/patterns-distributed-systems#execution)
-  * [Bulkheads](https://github.com/priyaaank/patterns-distributed-systems#bulkheads)
-  * [CircuitBreaker](https://github.com/priyaaank/patterns-distributed-systems#circuit-breakers)
-  * [Graceful Degradation](https://github.com/priyaaank/patterns-distributed-systems#graceful-degradation--failover-passing-control-to-failover-function-for-dummy-tags)
-  * [RateLimiting](https://github.com/priyaaank/patterns-distributed-systems#rate-limiting)
-  * [Backpressure](https://github.com/priyaaank/patterns-distributed-systems#backpressure)
+* [Overview](#overview)
+* [Tools / Frameworks used](#tools--frameworks-used)
+* [Application installation](#osx)
+  * [OSX](#osx)
+  * [Ubuntu 18.04](#linux-ubutnu-1804)
+  * [Windows](#windows)
+* [Load test setup](#load-test-setup)
+* [Scenario execution](#execution)
+  * [Bulkheads](#bulkheads)
+  * [CircuitBreaker](#circuit-breakers)
+  * [Graceful Degradation](#graceful-degradation--failover-passing-control-to-failover-function-for-dummy-tags)
+  * [RateLimiting](#rate-limiting)
+  * [Backpressure](#backpressure)
 
 
 ## Overview
